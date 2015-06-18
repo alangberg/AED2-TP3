@@ -1,34 +1,41 @@
 #ifndef PC_H
 #define PC_H
-
+#include "../Conjunto/Conjunto.h"
 using namespace std;
-
+using namespace aed2;
 class Pc
 {
 
     public:
-    	Pc();
-    	Pc(long int);
-    	long int IP();
+    	Pc(string, Conjunto<int>);
+        Pc();
+    	string IP();
     	void operator=(const Pc& otra);
     private:    	
-        long int p;    	
+        string p;
+        Conjunto<int> c;
+
+
 };
 
-Pc::Pc(){
-	p = 0;
+Pc::Pc(){    
 }
 
-Pc::Pc(long int n){
-	p = n;
+
+Pc::Pc(string s, Conjunto<int> con){
+	p = s;
+    c = con;
 }
 
-long int Pc::IP(){
+
+
+string Pc::IP(){
 	return p;
 }
 
 void Pc::operator=(const Pc& otra){
 	p = otra.p;
+    c = otra.c;
 }
 
 
