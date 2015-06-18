@@ -1,5 +1,5 @@
 /**
- * Modulo Lista
+ * Modulo Lista Enlazada
  * Algoritmos y Estructuras de Datos 2
  */
 
@@ -609,6 +609,6 @@ bool operator == (const Lista<T>& l1, const Lista<T>& l2)
 	return not it1.HaySiguiente() and not it2.HaySiguiente();
 }
 
-};
+} // namespace aed2 
 
 #endif // AED2_LISTA_H_INCLUDED
