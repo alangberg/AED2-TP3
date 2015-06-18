@@ -3,10 +3,10 @@
 #include "Pc.h"
 using namespace std;
 
-class Paquete // CAMBIAR: pasar pc por referencia
+class Paquete // pasar pc por referencia ????
 {
 	public:
-		Paquete(int, int, Pc&, Pc&);
+		Paquete(int, int, Pc, Pc);
 		unsigned int ID() const;
 		int prioridad() const;
 		Pc origen() const;
@@ -15,19 +15,19 @@ class Paquete // CAMBIAR: pasar pc por referencia
     private:
         unsigned int id_paq;
         int prior_paq;
-        Pc* pc_origen;
-        Pc* pc_destino;
+        Pc pc_origen;
+        Pc pc_destino;
 };
 
 
 
 
 
-Paquete::Paquete(int i, int p, Pc& o, Pc& d){
+Paquete::Paquete(int i, int p, Pc o, Pc d){
 	id_paq = i;
 	prior_paq = p;
-	*pc_origen = o;
-	*pc_destino = d;
+	pc_origen = o;
+	pc_destino = d;
 }
 
 
@@ -40,11 +40,11 @@ int Paquete::prioridad() const{
 } 
 
 Pc Paquete::origen() const{
-	return *pc_origen;
+	return pc_origen;
 } 
 
 Pc Paquete::destino() const{
-	return *pc_destino;
+	return pc_destino;
 } 
 
 bool Paquete::operator<(const Paquete& otro) const{

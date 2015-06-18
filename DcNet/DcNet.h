@@ -22,7 +22,7 @@ class DcNet
         // DiccTrie<Pc,Definicion> paquetes;
         // tuple<Pc,int> masEnviados;
         // Red red;
-        // DiccAvl< tuple< Pc,DiccAvl<Pc,Pc> > >
+        // DiccAvl<Pc,DiccAvl<Pc,Pc>>
         Pc aux;
 };
 

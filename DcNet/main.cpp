@@ -12,6 +12,6 @@ int main() {
 	Pc p(1000);
 	Pc p2(50);
 	Paquete paq(10,100,p,p2);
-	cout << p.IP() << endl;
+	cout << paq.origen().IP() << endl;
 	return 0;
 }
