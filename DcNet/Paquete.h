@@ -1,31 +1,33 @@
+/**
+ * Modulo Paquete
+ * Algoritmos y Estructuras de Datos 2
+ */
 #ifndef PAQUETE_H
 #define PAQUETE_H
 #include "Pc.h"
 #include "../Conjunto/Conjunto.h"
+#include "TiposSecundarios.h"
 using namespace std;
 using namespace aed2;
 
 class Paquete // pasar pc por referencia ????
 {
 	public:
-		Paquete(int, int, Pc, Pc);
-		int ID() const;
-		int prioridad() const;
+		Paquete(Id, Prioridad, Pc, Pc);
+		Id ID() const;
+		Prioridad prioridad() const;
 		Pc origen() const;
 		Pc destino() const;
 		bool operator<(const Paquete& otro) const;
     private:
-        int id_paq;
-        int prior_paq;
+        Id id_paq;
+        Prioridad prior_paq;
         Pc pc_origen;
         Pc pc_destino;
 };
 
 
-
-
-
-Paquete::Paquete(int i, int p, Pc o, Pc d){
+Paquete::Paquete(Id i, Prioridad p, Pc o, Pc d){
 	id_paq = i;
 	prior_paq = p;
 	pc_origen = o;
@@ -33,11 +35,11 @@ Paquete::Paquete(int i, int p, Pc o, Pc d){
 }
 
 
-int Paquete::ID() const{
+Id Paquete::ID() const{
 	return id_paq;
 } 
 
-int Paquete::prioridad() const{
+Prioridad Paquete::prioridad() const{
 	return prior_paq;
 } 
 
