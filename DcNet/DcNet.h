@@ -3,7 +3,9 @@
 //#include <tuple>
 #include "Pc.h"
 #include "Paquete.h"
+#include "../Conjunto/Conjunto.h"
 using namespace std;
+using namespace aed2;
 
 
 class DcNet

@@ -1,19 +1,21 @@
 #ifndef PAQUETE_H
 #define PAQUETE_H
 #include "Pc.h"
+#include "../Conjunto/Conjunto.h"
 using namespace std;
+using namespace aed2;
 
 class Paquete // pasar pc por referencia ????
 {
 	public:
 		Paquete(int, int, Pc, Pc);
-		unsigned int ID() const;
+		int ID() const;
 		int prioridad() const;
 		Pc origen() const;
 		Pc destino() const;
 		bool operator<(const Paquete& otro) const;
     private:
-        unsigned int id_paq;
+        int id_paq;
         int prior_paq;
         Pc pc_origen;
         Pc pc_destino;
@@ -31,7 +33,7 @@ Paquete::Paquete(int i, int p, Pc o, Pc d){
 }
 
 
-unsigned int Paquete::ID() const{
+int Paquete::ID() const{
 	return id_paq;
 } 
 
