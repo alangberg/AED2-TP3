@@ -20,24 +20,15 @@ class DcNet
         int enviados(const Pc&) const;
         Conjunto<Paquete> paquetes(const Pc&) const;
         bool enTransito(const Paquete&) const;
-        Pc masEnviado() const;
+        Pc masEnviados() const;
     private:       
-        //DiccTrie<Pc,Definicion> paquetes;
+        //Dicc<Pc,Definicion> paquetes//DiccTrie<Pc,Definicion> paquetes;
         Pc masEnviados;
         int cantMasEnviados;
         //tuple<Pc,int> masEnviados; Hace falta??
         Red red;
         //DiccAvl< Pc,DiccAvl<Pc,Pc> > siguientes;
 };
-
-
-DcNet::DcNet(const Red& r){
-    red = r;
-    masEnviados = r.mostrarComputadoras().DameUno();
-    cantMasEnviados = 0;
-    //siguientes = 
-
-}
 
 
 
