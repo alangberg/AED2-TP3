@@ -278,7 +278,6 @@ T ColaPriorHeap<T>::Desencolar(){
                 	raiz->izq = NULL;
                 	bajar(raiz);
             	}else{
-                	raiz = NULL;
                 	delete raiz;
             }
 		}
