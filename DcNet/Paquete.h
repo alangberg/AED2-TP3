@@ -23,6 +23,7 @@ class Paquete // pasar pc por referencia ????
 		const Pc& origen() const;
 		const Pc& destino() const;
 		bool operator<(const Paquete& otro) const;
+		void mostrar(ostream& o) const;
     private:
         Id id_paq;
         Prioridad prior_paq;
@@ -53,7 +54,16 @@ const Pc& Paquete::destino() const{
 	return pc_destino;
 } 
 
+
+void Paquete::mostrar(ostream& o) const{
+    o << "[" << id_paq << ";" << prior_paq << ";";
+   	pc_origen.mostrar(o);
+    o << ";";
+    pc_destino.mostrar(o);
+    o << "]" <<endl;
 }
+
+};
 
 
 #endif // PAQUETE_H

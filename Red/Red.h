@@ -47,23 +47,27 @@ class Red
 
 		struct Conexion {
 		
-			Conexion(Ip compu1, Interfaz int1, Ip compu2, Interfaz int2)
+			Conexion(const Ip compu1, const Interfaz int1, const Ip compu2, const Interfaz int2)
 			: pc1(compu1), i1(int1), pc2(compu2), i2(int2){}
 
-			Ip Prim(){
+			const Ip Prim() const{
 				return pc1;
 			}
 
-			Interfaz Seg(){
+			const Interfaz Seg() const{
 				return i1;
 			}
 
-			Ip Ter(){
+			const Ip Ter() const{
 				return pc2;
 			}
 
-			Interfaz Cuar(){
+			const Interfaz Cuar() const{
 				return i2;
+			}
+
+			void mostrar(ostream& o) const{
+				o << "{" << pc1 << "," << i1 << "," << pc2 << "," << i2 << "}";
 			}
 
 			Ip pc1;
@@ -117,6 +121,60 @@ void Red::agregarCompu(const Pc& p)
 	Conjunto<Ip> c;
 	vecinos.DefinirRapido(p.IP(), c);
 }
+
+void Red::conectar(const Pc& p1, const Interfaz i1, const Pc& p2, const Interfaz i2)
+{
+	Ip ip1 = p1.IP();
+	Ip ip2 = p2.IP();
+	Conexion c(ip1, i1, ip2, i2);
+	conexiones.AgregarAdelante(c);
+	Dicc<Ip, Conjunto<Ip> >::Iterador it = vecinos.CrearIt();
+	while (it.SiguienteClave() != ip1 && it.SiguienteClave() != ip2){
+		it.Avanzar();
+	}
+	if (it.SiguienteClave() == ip1) {
+		it.SiguienteSignificado().AgregarRapido(ip2);
+		it.Avanzar();
+		while(it.SiguienteClave() != ip2){
+			it.Avanzar();
+		} 
+		it.SiguienteSignificado().AgregarRapido(ip1);
+	}else{
+		it.SiguienteSignificado().AgregarRapido(ip1);
+		it.Avanzar();
+		while(it.SiguienteClave() != ip1){
+			it.Avanzar();
+		} 
+		it.SiguienteSignificado().AgregarRapido(ip2);
+	} 
+}
+
+bool Red::estanConectadas(const Pc& p1, const Pc& p2) const{
+	Ip ip1 = p1.IP();
+	Ip ip2 = p2.IP();
+	return (vecinos.Significado(ip1)).Pertenece(ip2);
+}
+
+Interfaz Red::interfazQueUsan(const Pc& p1, const Pc& p2) const{
+	Lista<Conexion>::const_Iterador it = conexiones.CrearIt();
+	Ip ip1 = p1.IP();
+	Ip ip2 = p2.IP();
+	while (it.HaySiguiente() && it.Siguiente().Prim() != ip1 && it.Siguiente().Ter() != ip1){
+		it.Avanzar();
+	}
+	Interfaz res; 
+	if (it.Siguiente().Prim() == ip1){
+		res = it.Siguiente().Seg();
+	}else{
+		res = it.Siguiente().Cuar();
+	}
+	return res;
+}
+
+
+
+
+
 
 
 

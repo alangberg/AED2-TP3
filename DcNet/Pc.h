@@ -4,6 +4,7 @@
 #include "TiposSecundarios.h"
 using namespace std;
 using namespace aed2;
+#include <iostream>
 
 class Pc
 {
@@ -15,6 +16,7 @@ class Pc
         const Conjunto<Interfaz>& Interfaces() const;
     	void operator=(const Pc& otra);
         bool operator == (const Pc& p1) const;
+        void mostrar(ostream& o) const;    
     private:    	
         Ip p;
         Conjunto<Interfaz> c;
@@ -43,6 +45,10 @@ void Pc::operator=(const Pc& otra){
 
 bool Pc::operator == (const Pc& p1) const{
     return p1.p == p && p1.c == c;
+}
+
+void Pc::mostrar(ostream& o) const{
+    o << "[" << p << ";" << c << "]";
 }
 
 
