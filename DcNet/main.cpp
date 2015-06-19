@@ -56,6 +56,17 @@ int main() {
 
 	cout << r.interfazQueUsan(b,a) << endl;
 
+	cout << r.conectadoCon(a).Cardinal() << endl;
+
+	Lista<int> l;
+	l.AgregarAdelante(5);
+	l.AgregarAdelante(12);
+	l.AgregarAdelante(3);
+	l.AgregarAdelante(4);
+	cout << l.Esta(14) <<endl;
+
+
+
 	
 
 

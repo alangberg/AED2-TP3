@@ -84,6 +84,8 @@ class Red
         
         Lista<Conexion> conexiones; //FALTA COMPLETAR TUPLA PC,INTERFAZ,PC,INTERFAZ!!!!
 
+        Conjunto< Lista<Pc> > auxCaminos(const Pc& p1, const Pc& p2, Lista<Pc> recorrido, Conjunto<Pc> candidatos) ;
+
 };
 
 Red::Red()
@@ -171,6 +173,42 @@ Interfaz Red::interfazQueUsan(const Pc& p1, const Pc& p2) const{
 	return res;
 }
 
+Conjunto<Pc> Red::conectadoCon(const Pc& p1) const{	
+	Conjunto<Ip> c = vecinos.Significado(p1.IP());
+	Conjunto<Ip>::const_Iterador it = c.CrearIt();
+	Conjunto<Pc> res;
+	while (it.HaySiguiente()) {
+		Pc compu(it.Siguiente(), interfaces.Significado(it.Siguiente()));
+		res.AgregarRapido(compu);
+		it.Avanzar();
+	}
+	return res;
+}
+
+Conjunto< Lista<Pc> > Red::caminosMinimos(const Pc& p1, const Pc& p2) const{	
+}
+
+Conjunto< Lista<Pc> > Red::auxCaminos(const Pc& p1, const Pc& p2, Lista<Pc> recorrido, Conjunto<Pc> candidatos) {
+	Conjunto< Lista<Pc> > res;
+	if (!candidatos.EsVacio()){
+		if (recorrido.Ultimo() == p2){
+			Conjunto< Lista<Pc> > res;
+			res.AgregarRapido(recorrido);
+			return res;
+		}else if(!recorrido.Esta(candidatos.DameUno())){
+				Conjunto<Pc> aux = candidatos;
+				aux.SinUno();
+				Lista<Pc> copia = recorrido;
+				copia.AgregarAtras(candidatos.DameUno());
+				Conjunto< Lista<Pc> > aux2 = auxCaminos(p1, p2, copia, conectadoCon(candidatos.DameUno()));
+				aux2.Unir(auxCaminos(p1, p2, recorrido, aux));
+				return aux2;
+			}else{
+				Conjunto<Pc> aux = candidatos;
+				return auxCaminos(p1, p2, recorrido, aux);
+			}
+	}
+}
 
 
 
