@@ -11,11 +11,13 @@ class ColaPriorHeap{
         ColaPriorHeap();
         void Encolar(const T& a);
         bool EsVacia();
-        T& Desencolar();
+        T Desencolar();
         int Cantidad();
 
 
     private:
+
+// Estructura del nodo, tiene un valor de tipo T, su altura, un puntero para cada uno de sus dos hijos y uno para su padre
 
         struct Nodo{
             T dato;
@@ -25,9 +27,13 @@ class ColaPriorHeap{
             int alt;
         };
 
+// Funcion para ver si un elemento tiene mas prioridad que otro
+
         bool mayorPrioridad(T& dato1, T& dato2){
             return (dato1 > dato2);
         }
+
+// Funcion para cambiar los valores dados dos nodos
 
         void swapear(Nodo* papa, Nodo* n){
 
@@ -36,6 +42,9 @@ class ColaPriorHeap{
         n->dato = aux;
    		}
 
+
+// Funcion que luego de agregar un elemento, reajusta la altura del arbol y luego va subiendo el valor agregado hasta que encuentre su lugar
+//________________________________________________________________
 
         void acomodar(Nodo* n){
 
@@ -60,6 +69,9 @@ class ColaPriorHeap{
 
         }
 
+// Funcion para reajustar la altura una vez que se desencolo el nodo izq de un padreult
+//________________________________________________________________
+
 		void ajustaraltura(Nodo* n){
 			n->alt = n->alt - 1;
 			while (n->padre != NULL && n->padre->izq == n){
@@ -70,28 +82,27 @@ class ColaPriorHeap{
 
 		}
 
+// Funcion para encontrar el nuevo padreult luego de haber desencolado el elemento izq de un padreult
+//________________________________________________________________
 
-        Nodo* buscarpadreult(Nodo* n){
+		Nodo* buscarpadreult(Nodo* n){
 
-        if(n == padreult){
-            padreult = NULL;
-        }else{
-        	if(n->alt == 2){
+            int altDer = n->der == NULL? 0 : n->der->alt;
+            int altIzq = n->izq == NULL? 0 : n->izq->alt;
+
+            if(n == padreult){
+                return NULL;
+            }else if(n->alt == 2){
                 return n;
-        	}else{
-        		if (n->izq->alt == n->der->alt){
-                    buscarpadreult(n->der);
-                }else{
-        			if(n->izq->alt > n->der->alt){
-        				buscarpadreult(n->izq);
-
-        			}
-        		}
-    	    }
-	    }
-
-
+            }else if (altIzq == altDer){
+                return buscarpadreult(n->der);
+            }else{
+                return buscarpadreult(n->izq);
+            }
         }
+
+// Funcion para bajar el valor de un nodo hasta encontrar su lugar
+//________________________________________________________________
 
         void bajar(Nodo* n){
 
@@ -119,10 +130,8 @@ class ColaPriorHeap{
         int cant;
 };
 
-template<class T>
-ostream& operator<<(ostream& out, const ColaPriorHeap<T>& a){
-return a.mostrar(out);
-}
+// Constructor por defecto
+//________________________________________________________________
 
 template<typename T>
 ColaPriorHeap<T>::ColaPriorHeap(){
@@ -131,8 +140,13 @@ ColaPriorHeap<T>::ColaPriorHeap(){
     cant = 0;
 }
 
+// Funcion para encolar un elemnto
+//________________________________________________________________
+
 template<typename T>
 void ColaPriorHeap<T>::Encolar(const T& a){
+
+// Creo el nodo con los datos 
 
     Nodo* n = new Nodo;
     n->izq = NULL;
@@ -142,18 +156,29 @@ void ColaPriorHeap<T>::Encolar(const T& a){
     n->alt = 1;
     cant++;
 
+// Me fijo si esta vacio    
+
     if (raiz == NULL){
         raiz = n;
     }else{
+
+// Si no esta vacio me fijo si tiene solo un elemento (la raiz)
+
         if (padreult == NULL){
             padreult = raiz;
             n->padre = raiz;
             raiz->izq = n;
         }else{
+
+// Me fijo si padreult der tiene algo , sino lo tiene lo pongo ahi, (siempre que se llega aca el padreult se llena)
+
             if (padreult->der == NULL){
                 n->padre = padreult;
                 padreult->der = n;
             }else{
+
+// Me fijo si esta completo el arbol, si lo esta, significa que el nueov padreult es el nodo mas a la izq
+
                 if ((log2(cant)) == int(log2(cant))){
                     Nodo* actual = raiz;
                     while (actual->izq != NULL){
@@ -163,9 +188,12 @@ void ColaPriorHeap<T>::Encolar(const T& a){
                     n->padre = actual;
                     actual->izq = n;
                 }else{
+
+// Como el padreult se lleno busco el nuevo padreult , haciendo una busqueda transversal y pongo el valor en padreult izq   
+
                     Nodo* abuelo = padreult->padre;
                     Nodo* actual = padreult;
-                    while (abuelo!=NULL && abuelo->der == NULL){
+                    while (abuelo!=NULL && abuelo->der == actual){
                         actual = abuelo;
                         abuelo = abuelo->padre;
                     }
@@ -181,35 +209,47 @@ void ColaPriorHeap<T>::Encolar(const T& a){
         }
     }
 
+// Subo el valor del nuevo nodo hasta que encuentre su lugar
+
     acomodar(n);
 
 }
+
+// Cantidad
+//________________________________________________________________
 
 template<typename T>
 int ColaPriorHeap<T>::Cantidad(){
 return cant;
 }
 
+// Funcion para Desencolar
+//________________________________________________________________
 
 template<typename T>
-T& ColaPriorHeap<T>::Desencolar(){
+T ColaPriorHeap<T>::Desencolar(){
 
     cant--;
 	T a = raiz->dato;
 	Nodo* ultimo;
 
-
+// Me fijo si padreult es nulo o no, basicamente si el heap tiene 3 elementos (no hay padreult) o si tiene mas
 
 	if(padreult != NULL){
 
-        if (padreult->der != NULL){
+// Agarro el valor del nodo der de padreult, lo pongo como raiz y lo bajo, ademas deleteo el nodo der de padreult pues ya no deberia existir
 
+
+        if (padreult->der != NULL){
             ultimo = padreult->der;
             swapear(ultimo,raiz);
             delete padreult->der;
             padreult->der = NULL;
             bajar(raiz);
+
         }else{
+
+// Modifico la altura, agarro el valor del nodo izq de padreult, lo pongo como raiz y lo bajo, ademas deleteo el nodo izq de padreult pues ya no deberia existir, y busco el nuevo padreult 
 
             ultimo = padreult->izq;
             swapear(ultimo,raiz);
@@ -222,70 +262,26 @@ T& ColaPriorHeap<T>::Desencolar(){
             }
             bajar(raiz);
         }
-    }else{
-        if(raiz->der != NULL){
+    	}else{
 
-            swapear(raiz,raiz->der);
-            delete raiz->der;
-            raiz->der = NULL;
-            bajar(raiz);
-        }else{
-            if(raiz->izq != NULL){
+// En este caso no hay padreult pues solo hay como mucho 3 elementos
 
-                swapear(raiz,raiz->izq);
-                delete raiz->izq;
-                raiz->izq = NULL;
-                bajar(raiz);
-            }else{
-                raiz = NULL;
-                delete raiz;
+        	if(raiz->der != NULL){
+           		swapear(raiz,raiz->der);
+           		delete raiz->der;
+            	raiz->der = NULL;
+           		bajar(raiz);
+       		}else{
+            	if(raiz->izq != NULL){
+                	swapear(raiz,raiz->izq);
+                	delete raiz->izq;
+                	raiz->izq = NULL;
+                	bajar(raiz);
+            	}else{
+                	raiz = NULL;
+                	delete raiz;
             }
-	}
+		}
     }
-
-
- return a;
-
+return a;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-
-
-
-
-
-template<typename T>
-void ColaPriorHeap<T>::
-template<typename T>
-void ColaPriorHeap<T>::
-
-
-
-*/
-
-
-
-
-
-
-
-
-
-
-
-
-

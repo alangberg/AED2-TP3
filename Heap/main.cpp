@@ -1,15 +1,32 @@
 #include <iostream>
+#include <cstdlib>
+
 #include "Heap.cpp"
+
 
 using namespace std;
 
-int main()
-{
-    cout << "Hello world!" << endl;
+int main(){
 
-     ColaPriorHeap<int> a;
+ColaPriorHeap<int> a;
+
+int i = 0;
+
+while( i < 50){
+	int x = rand() %100;
+	a.Encolar(x);
+	i++;
+}
+
+i = 0;
+
+while( i < 50){
+	cout << a.Desencolar() << endl;
+	i++;
+}
 
 
+return 0;
 
-    return log2(a.Cantidad()) == int(log2(a.Cantidad()));
+
 }
