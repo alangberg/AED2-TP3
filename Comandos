@@ -1,0 +1,8 @@
+git clone https://github.com/alangberg/algo2-TP3 //BAJA EL REPO SI NO LO TENES.
+
+git add "nombre de la carpeta" //agregar carpeta
+git add . //agrega TODO.
+git commit -m "comit" //comentario obligatorio para subir.
+git push //sube lo comitiado
+
+git pull //actualiza los datos.
