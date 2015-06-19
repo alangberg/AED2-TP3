@@ -6,7 +6,7 @@ using namespace std;
 using namespace aed2;
 #include <iostream>
 
-class Pc
+class Pc // ver operador =
 {
 
     public:

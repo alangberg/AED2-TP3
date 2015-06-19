@@ -19,9 +19,7 @@ Avl<T>::Avl(){
 	cant = 0;
 } 
 
-template <class T>
-Avl<T>::~Avl()
-{ /** TODO */ }
+
 
 template <class T>
 unsigned int Avl<T>::cardinal() const {
@@ -284,4 +282,12 @@ void Avl<T>::borrar(const T& clave){ // problemas con 1 y 2 nodos
 	}
 
 	rebalanceo(padreAux);
+}
+
+
+template <class T>
+Avl<T> Avl<T>::operator=(const Avl<T>& otro){
+	raiz = otro.raiz;
+	cant = otro.cant;
+    return *this;	
 }

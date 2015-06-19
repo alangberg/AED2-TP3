@@ -8,12 +8,12 @@ class Avl
 {
     public:
         Avl();      
-        ~Avl();
         void insertar(const T&);
         bool pertenece(const T&) const;
         void borrar(const T&);
         unsigned int cardinal() const;
         void mostrar(std::ostream&) const;            
+        Avl<T> operator=(const Avl<T>& otro);
     private:       
         struct Nodo
         {       

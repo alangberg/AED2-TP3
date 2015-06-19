@@ -10,10 +10,12 @@
 using namespace std;
 using namespace aed2;
 
+
+
 namespace aed2
 {
 
-class Paquete // pasar pc por referencia ????
+class Paquete // pasar pc por referencia ???? revisar el operador =
 {
 	public:
 		Paquete();
@@ -23,6 +25,7 @@ class Paquete // pasar pc por referencia ????
 		const Pc& origen() const;
 		const Pc& destino() const;
 		bool operator<(const Paquete& otro) const;
+		Paquete& operator=(const Paquete& otro);
 		void mostrar(ostream& o) const;
     private:
         Id id_paq;
@@ -63,7 +66,19 @@ void Paquete::mostrar(ostream& o) const{
     o << "]" <<endl;
 }
 
+
+Paquete& Paquete::operator=(const Paquete& otro) {
+	id_paq = otro.id_paq;
+    prior_paq = otro.prior_paq;
+    pc_origen = otro.pc_origen;
+    pc_destino = otro.pc_destino;
+    return *this;
+}
+
+
 };
+
+
 
 
 #endif // PAQUETE_H
