@@ -122,13 +122,13 @@ void Avl<T>::rotacionDerecha(Nodo* n){
 
 template <class T>
 void Avl<T>::rotacionDerIzq(Nodo* n){
-	rotacionIzquierda(n->izq);
+	rotacionIzquierda(n->der);
 	rotacionDerecha(n);		
 }
 
 template <class T>
 void Avl<T>::rotacionIzqDer(Nodo* n){
-	rotacionDerecha(n->der);
+	rotacionDerecha(n->izq);
 	rotacionIzquierda(n);
 }
 
@@ -155,7 +155,7 @@ void Avl<T>::rebalanceo(Nodo* n){
 		altIzqDer = n->izq->der == NULL? 0 : n->izq->der->altura;
 	}
 	if (n->der != NULL){
-		altDerIzq = n->der->der == NULL? 0 : n->der->der->altura;
+		altDerDer = n->der->der == NULL? 0 : n->der->der->altura;
 		altDerIzq = n->der->izq == NULL? 0 : n->der->izq->altura;
 	}
 	if (altDer - altIzq == 2){

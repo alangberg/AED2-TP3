@@ -243,7 +243,7 @@ DiccAvl<K,S>::buscar(const K& clave) const {
 
 
 template<class K,class S>
-void DiccAvl<K,S>::borrar(const K& clave){ // problemas con 1 y 2 nodos
+void DiccAvl<K,S>::borrar(const K& clave){
 	Nodo* n = buscar(clave);
 	Nodo* aux;
 	Nodo* padreAux;
@@ -278,6 +278,7 @@ void DiccAvl<K,S>::borrar(const K& clave){ // problemas con 1 y 2 nodos
 		if (n == raiz){
 			raiz = NULL;
 			delete n;
+			return;
 		} else {
 			padreAux = n->padre;
 			if (padreAux->der == n){
