@@ -623,7 +623,7 @@ typename Dicc<K,S>::const_Iterador Dicc<K,S>::Buscar(const K& clave) const
 {
 	typename Dicc<K,S>::const_Iterador it = CrearIt();
 
-	while(it.HaySiguiente() && it.Siguiente().clave != clave)
+	while(it.HaySiguiente() && !(it.Siguiente().clave == clave))
 	{
 		it.Avanzar();
 	}

@@ -1,42 +1,51 @@
 #ifndef PC_H
 #define PC_H
 #include "../Conjunto/Conjunto.h"
+#include "TiposSecundarios.h"
 using namespace std;
 using namespace aed2;
+
 class Pc
 {
 
     public:
-    	Pc(string, Conjunto<int>);
+    	Pc(const Ip&, const Conjunto<Interfaz>&);
         Pc();
-    	string IP();
+    	const Ip& IP() const;
+        const Conjunto<Interfaz>& Interfaces() const;
     	void operator=(const Pc& otra);
+        bool operator == (const Pc& p1) const;
     private:    	
-        string p;
-        Conjunto<int> c;
+        Ip p;
+        Conjunto<Interfaz> c;
 
 
 };
 
-Pc::Pc(){    
-}
+Pc::Pc(){}
 
 
-Pc::Pc(string s, Conjunto<int> con){
-	p = s;
-    c = con;
-}
+Pc::Pc(const Ip& s, const Conjunto<Interfaz>& con): p(s), c(con) {}
 
 
-
-string Pc::IP(){
+const Ip& Pc::IP() const{
 	return p;
+}
+
+const Conjunto<Interfaz>& Pc::Interfaces() const {
+    return c;
 }
 
 void Pc::operator=(const Pc& otra){
 	p = otra.p;
     c = otra.c;
 }
+
+bool Pc::operator == (const Pc& p1) const{
+    return p1.p == p && p1.c == c;
+}
+
+
 
 
 #endif // PC_H
