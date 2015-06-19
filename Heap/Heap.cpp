@@ -212,7 +212,6 @@ void ColaPriorHeap<T>::Encolar(const T& a){
 // Subo el valor del nuevo nodo hasta que encuentre su lugar
 
     acomodar(n);
-
 }
 
 // Cantidad
@@ -278,8 +277,8 @@ T ColaPriorHeap<T>::Desencolar(){
                 	raiz->izq = NULL;
                 	bajar(raiz);
             	}else{
-                	raiz = NULL;
                 	delete raiz;
+                    raiz = NULL;
             }
 		}
     }
