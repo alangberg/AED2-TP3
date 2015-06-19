@@ -13,6 +13,7 @@ int main() {
 	a.definir(20,5);
 	
 	a.borrar(20);
+	//a.definir(26,10);
 
 	
 
