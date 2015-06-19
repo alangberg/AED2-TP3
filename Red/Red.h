@@ -86,6 +86,8 @@ class Red
 
         Conjunto< Lista<Pc> > auxCaminos(const Pc& p1, const Pc& p2, Lista<Pc> recorrido, Conjunto<Pc> candidatos) ;
 
+        Conjunto<Lista<Pc> > Auxminimos(Conjunto<Lista<Pc> > C);
+
 };
 
 Red::Red()
@@ -210,8 +212,37 @@ Conjunto< Lista<Pc> > Red::auxCaminos(const Pc& p1, const Pc& p2, Lista<Pc> reco
 	}
 }
 
+Conjunto<Lista<Pc> > Red::Auxminimos(Conjunto<Lista<Pc> > C){
+			Conjunto<Lista<Pc> > vacio = Conjunto<Lista<Pc> >();
+			if (C.EsVacio()){
+				return Conjunto<Lista<Pc> >();
+			}else if (C.Cardinal()==1){
+				vacio.AgregarRapido(C.DameUno());
+			}else{ 
+				Conjunto<Lista<Pc> > aux = C; 
+				aux.SinUno();
+				if(C.DameUno().Longitud() < Auxminimos(aux).DameUno().Longitud()) {
+					vacio.AgregarRapido(C.DameUno());
+				}else if (C.DameUno().Longitud() == Auxminimos(aux).DameUno().Longitud()) {
+					Auxminimos(aux).AgregarRapido(C.DameUno());
+				}else{
+					Auxminimos(aux);
+				}
+			}	
+			
+		}		
 
-
+bool Red::interfazUsada(const Pc& p1, const Interfaz i1) const{
+	Lista<Conexion>::const_Iterador it = conexiones.CrearIt();
+	
+	while (it.HaySiguiente()){
+		if((it.Siguiente().Prim() == p1.IP() && it.Siguiente().Seg() == i1) || (it.Siguiente().Ter() == p1.IP() && it.Siguiente().Cuar() == i1)){
+			return true;
+		}
+		it.Avanzar();
+	}
+	return false;
+}
 
 
 
