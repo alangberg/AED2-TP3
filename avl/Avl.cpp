@@ -71,7 +71,7 @@ Avl<T>::buscarPapa(const T& clave) const {
 
 
 template <class T>
-void Avl<T>::rotacionIzquierda(Nodo* n){
+void Avl<T>::rotacionDerecha(Nodo* n){
 	Nodo* aux = n->der->izq;
 	if (n == raiz){
 		n->der->izq = n;
@@ -95,7 +95,7 @@ void Avl<T>::rotacionIzquierda(Nodo* n){
 
 
 template <class T>
-void Avl<T>::rotacionDerecha(Nodo* n){
+void Avl<T>::rotacionIzquierda(Nodo* n){
 	Nodo* aux = n->izq->der;
 	if (n == raiz){
 		n->izq->der = n;
@@ -160,13 +160,13 @@ void Avl<T>::rebalanceo(Nodo* n){
 		if (altDerDer > altDerIzq){ //  >= ?
 			rotacionDerecha(n);
 		} else {
-			rotacionIzqDer(n);
+			rotacionDerIzq(n);
 		}
 	} else if (altDer - altIzq == -2){
 		if (altIzqIzq > altIzqDer){ //  >= ?
 			rotacionIzquierda(n);
 		} else{
-			rotacionDerIzq(n);
+			rotacionIzqDer(n);
 		}		
 	}
 	restablecerAlt(n);
@@ -284,10 +284,11 @@ void Avl<T>::borrar(const T& clave){ // problemas con 1 y 2 nodos
 	rebalanceo(padreAux);
 }
 
-
+/*
 template <class T>
 Avl<T> Avl<T>::operator=(const Avl<T>& otro){
 	raiz = otro.raiz;
 	cant = otro.cant;
     return *this;	
 }
+*/

@@ -10,14 +10,14 @@ using namespace std;
 int main() {
 
 	DiccAvl<int, int> a;
-	a.definir(20,5);
-	
-	a.borrar(20);
-	//a.definir(26,10);
-
+	a.definir(383,1);
+	a.definir(886,1);
+	a.definir(777,1);
 	
 
-	//a.mostrar(cout);
+	
+
+	a.mostrar(cout);
 	// a.definir(12,6);
 	// a.definir(2,7);
 	// a.definir(27,8);

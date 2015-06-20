@@ -5,7 +5,7 @@
 #include "Paquete.h"
 #include "../Conjunto/Conjunto.h"
 #include "../Heap/Heap.h"
-#include "../avl/Avl.h"
+#include "../avl/Avl.cpp"
 #include "../avl/DiccAvl.h"
 
 
@@ -25,7 +25,7 @@ class Definicion{
 	private:
 		Avl<Paquete> xid;
 		ColaPriorHeap<Paquete> xprior;
-		DiccAvl<  Paquete, Lista<Pc> > p_caminos;
+		//DiccAvl<  Paquete, Lista<Pc> > p_caminos;
 		int enviados;
 };
 

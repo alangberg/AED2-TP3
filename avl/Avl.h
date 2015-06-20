@@ -13,7 +13,7 @@ class Avl
         void borrar(const T&);
         unsigned int cardinal() const;
         void mostrar(std::ostream&) const;            
-        Avl<T> operator=(const Avl<T>& otro);
+        //Avl<T> operator=(const Avl<T>& otro);
     private:       
         struct Nodo
         {       
