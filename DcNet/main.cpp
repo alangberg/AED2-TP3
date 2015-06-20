@@ -1,5 +1,5 @@
 #include <iostream>
-#include "DcNet.h"
+#include "DcNet.cpp"
 #include "../Red/Red.h"
 //#include "math.h"
 using namespace std;
@@ -9,7 +9,7 @@ using namespace aed2;
 
 
 int main() {
-	/*
+	
 	//ARMO PC 
 	Conjunto<Interfaz> conj1 = Conjunto<Interfaz>();
 	conj1.Agregar(1);
@@ -75,7 +75,7 @@ int main() {
 
 
 
-	cout << r.mostrarComputadoras() <<endl;
+	//cout << r.mostrarComputadoras() <<endl;
 
 
 	Lista<int> l;
@@ -86,14 +86,14 @@ int main() {
 
 	
 
-	cout << r.caminosMinimos(e,c) <<endl;
-	cout << r.existeCamino(a,b) <<endl;
-	cout << r.interfazUsada(a, 21)<<endl;
+	//cout << r.caminosMinimos(e,c) <<endl;
+	//cout << r.existeCamino(a,b) <<endl;
+	//cout << r.interfazUsada(a, 21)<<endl;
 
-*/
+
 
 	
-
+	DcNet dc(r);
 
 
 

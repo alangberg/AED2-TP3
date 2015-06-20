@@ -20,14 +20,13 @@ class DcNet
         Red verRed() const;
         Lista<Pc> recorrido(const Paquete&) const;
         int enviados(const Pc&) const;
-        Conjunto<Paquete> paquetes(const Pc&) const;
+        Avl<Paquete> paquetes(const Pc&) const;
         bool enTransito(const Paquete&) const;
         Pc masEnviados() const;
     private:       
         Dicc<Pc,Definicion> pc_paquetes; //DiccTrie<Pc,Definicion> paquetes;
         Pc pc_masEnviados;
         int cant_MasEnviados;
-        //tuple<Pc,int> masEnviados; Hace falta??
         Red red;
         DiccAvl< Pc,DiccAvl<Pc,Pc> > siguientes;
 };

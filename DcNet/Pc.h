@@ -16,6 +16,7 @@ class Pc // ver operador =
         const Conjunto<Interfaz>& Interfaces() const;
     	void operator=(const Pc& otra);
         bool operator == (const Pc& p1) const;
+        bool operator != (const Pc& p1) const;
     private:    	
         Ip p;
         Conjunto<Interfaz> c;
@@ -43,8 +44,13 @@ void Pc::operator=(const Pc& otra){
 }
 
 bool Pc::operator == (const Pc& p1) const{
-    return p1.p == p && p1.c == c;
+    return p1.p == p;
 }
+
+bool Pc::operator != (const Pc& p1) const{
+    return p1.p != p;
+}
+
 
 
 ostream& operator << (ostream& os, const Pc& p){
