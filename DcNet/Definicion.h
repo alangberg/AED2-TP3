@@ -13,7 +13,7 @@ using namespace std;
 using namespace aed2;
 
 
-class Definicion{
+class Definicion{ // pasar por referencia !!!
 	public:
 		Definicion();
 		Definicion(const Avl<Paquete>& avl, const ColaPriorHeap<Paquete>& heap, const DiccAvl< Paquete, Lista<Pc> >& dicc);

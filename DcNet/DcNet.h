@@ -3,6 +3,8 @@
 //#include <tuple>
 #include "Pc.h"
 #include "Paquete.h"
+#include "Definicion.h"
+#include "../Red/Red.h"
 #include "../Conjunto/Conjunto.h"
 #include "../avl/DiccAvl.h"
 using namespace std;
@@ -22,12 +24,12 @@ class DcNet
         bool enTransito(const Paquete&) const;
         Pc masEnviados() const;
     private:       
-        //Dicc<Pc,Definicion> paquetes//DiccTrie<Pc,Definicion> paquetes;
-        Pc masEnviados;
-        int cantMasEnviados;
+        Dicc<Pc,Definicion> pc_paquetes; //DiccTrie<Pc,Definicion> paquetes;
+        Pc pc_masEnviados;
+        int cant_MasEnviados;
         //tuple<Pc,int> masEnviados; Hace falta??
         Red red;
-        //DiccAvl< Pc,DiccAvl<Pc,Pc> > siguientes;
+        DiccAvl< Pc,DiccAvl<Pc,Pc> > siguientes;
 };
 
 

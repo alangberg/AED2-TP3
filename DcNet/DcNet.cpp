@@ -5,15 +5,15 @@ using namespace std;
 
 DcNet::DcNet(const Red& r){ // falta terminar
     red = r;
-    masEnviados = r.mostrarComputadoras().DameUno();
-    cantMasEnviados = 0;
+    pc_masEnviados = r.mostrarComputadoras().DameUno();
+    cant_MasEnviados = 0;
     //siguientes = 
 
 }
 
 
 void DcNet::anadirPaquete(const Paquete& p){ // deberia haber aliasing para que funcione
-	Definicion* actual = paquetes.Significado(p);
+	Definicion* actual = pc_paquetes.Significado(p);
 	actual.xID().insertar(p);
 	actual.xPrior().Encolar(p);
 	Lista<Pc> camRec;
@@ -26,15 +26,15 @@ Red verRed() const{
 }
 
 int enviados(const Pc& p) const{
-	return paquetes.Significado(p).pEnviados();
+	return pc_paquetes.Significado(p).pEnviados();
 }
 
 Conjunto<Paquete> paquetes(const Pc& p) const{
-	return paquetes.Significado(p).xID();
+	return pc_paquetes.Significado(p).xID();
 }
 
 Pc masEnviados() const{
-	return masEnviados;
+	return pc_masEnviados;
 }
 
 
@@ -42,7 +42,7 @@ bool enTransito(const Paquete& p) const{
 	Conjunto<Pc>::Iterador it = crearIt(red.mostrarComputadoras()); // corregir
 	bool noEncontrado = true;
 	while (noEncontrado && HaySiguiente(it)){
-		Definicion* sig = paquetes.Significado(it.Siguiente());
+		Definicion* sig = pc_paquetes.Significado(it.Siguiente());
 		noEncontrado = !(sig.xID().pertenece(p));
 		it.Avanzar();
 	}

@@ -1,5 +1,5 @@
 #include <iostream>
-
+#include "DcNet.h"
 #include "../Red/Red.h"
 //#include "math.h"
 using namespace std;
@@ -9,6 +9,7 @@ using namespace aed2;
 
 
 int main() {
+	/*
 	//ARMO PC 
 	Conjunto<Interfaz> conj1 = Conjunto<Interfaz>();
 	conj1.Agregar(1);
@@ -89,6 +90,7 @@ int main() {
 	cout << r.existeCamino(a,b) <<endl;
 	cout << r.interfazUsada(a, 21)<<endl;
 
+*/
 
 	
 
