@@ -27,7 +27,7 @@ class Red
 		/// Operacion de asignacion
 		Red& operator=(const Red& otra);
 		/// Operaciones básicas
-		Conjunto<Pc> mostrarComputadoras() const;
+		const Conjunto<Pc> mostrarComputadoras() const;
 		
 		void agregarCompu(const Pc& p);
 		
@@ -41,9 +41,9 @@ class Red
 		
 		bool interfazUsada(const Pc& p1, const Interfaz i1) const;
 		
-		Conjunto< Lista<Pc> > caminosMinimos(const Pc& p1, const Pc& p2) const;
+		Conjunto< Lista<Pc> > caminosMinimos(const Pc& p1, const Pc& p2);
 		
-		bool existeCamino(const Pc& p1, const Pc& p2) const;
+		bool existeCamino(const Pc& p1, const Pc& p2);
 
 		struct Conexion {
 		
@@ -66,8 +66,9 @@ class Red
 				return i2;
 			}
 
-			void mostrar(ostream& o) const{
-				o << "{" << pc1 << "," << i1 << "," << pc2 << "," << i2 << "}";
+			friend ostream& operator << (ostream& os, const Conexion& c){
+   				os << "{" << c.Prim() << "," << c.Seg() << "," << c.Ter() << "," << c.Cuar() << "}" <<endl;
+   				return os;
 			}
 
 			Ip pc1;
@@ -77,6 +78,7 @@ class Red
 
 		};
 
+
 	private:
         Dicc<Ip, Conjunto<Interfaz> > interfaces;
         
@@ -84,9 +86,12 @@ class Red
         
         Lista<Conexion> conexiones; //FALTA COMPLETAR TUPLA PC,INTERFAZ,PC,INTERFAZ!!!!
 
-        Conjunto< Lista<Pc> > auxCaminos(const Pc& p1, const Pc& p2, Lista<Pc> recorrido, Conjunto<Pc> candidatos) ;
+        Conjunto< Lista<Pc> > caminos(const Pc& p1, const Pc& p2);
 
-        Conjunto<Lista<Pc> > Auxminimos(Conjunto<Lista<Pc> > C);
+        Conjunto< Lista<Pc> > auxCaminos(const Pc& p1, const Pc& p2, Lista<Pc> recorrido, Conjunto<Pc> candidatos);	
+
+        Conjunto<Lista<Pc> > auxMinimos(Conjunto<Lista<Pc> > C);
+
 
 };
 
@@ -107,7 +112,7 @@ Red& Red::operator=(const Red& otra)
 
 }
 
-Conjunto<Pc> Red::mostrarComputadoras() const
+const Conjunto<Pc> Red::mostrarComputadoras() const
 {
 	Conjunto<Pc> compus = Conjunto<Pc>();
 	Dicc<Ip, Conjunto<Interfaz> >::const_Iterador it = interfaces.CrearIt();
@@ -187,17 +192,23 @@ Conjunto<Pc> Red::conectadoCon(const Pc& p1) const{
 	return res;
 }
 
-Conjunto< Lista<Pc> > Red::caminosMinimos(const Pc& p1, const Pc& p2) const{	
+Conjunto< Lista<Pc> > Red::caminosMinimos(const Pc& p1, const Pc& p2) {
+	return auxMinimos(caminos(p1, p2));
+}
+
+Conjunto< Lista<Pc> > Red::caminos(const Pc& p1, const Pc& p2){
+	Lista<Pc> recorrido;
+	recorrido.AgregarAdelante(p1);
+	return auxCaminos(p1, p2, recorrido, conectadoCon(p1));
 }
 
 Conjunto< Lista<Pc> > Red::auxCaminos(const Pc& p1, const Pc& p2, Lista<Pc> recorrido, Conjunto<Pc> candidatos) {
-	Conjunto< Lista<Pc> > res;
-	if (!candidatos.EsVacio()){
+	if ( !(candidatos.EsVacio()) ){
 		if (recorrido.Ultimo() == p2){
 			Conjunto< Lista<Pc> > res;
 			res.AgregarRapido(recorrido);
 			return res;
-		}else if(!recorrido.Esta(candidatos.DameUno())){
+		}else if( !(recorrido.Esta(candidatos.DameUno())) ){
 				Conjunto<Pc> aux = candidatos;
 				aux.SinUno();
 				Lista<Pc> copia = recorrido;
@@ -207,34 +218,41 @@ Conjunto< Lista<Pc> > Red::auxCaminos(const Pc& p1, const Pc& p2, Lista<Pc> reco
 				return aux2;
 			}else{
 				Conjunto<Pc> aux = candidatos;
+				aux.SinUno();
 				return auxCaminos(p1, p2, recorrido, aux);
 			}
+	}else{
+		Conjunto< Lista<Pc> > res;
+		return res;
 	}
 }
 
-Conjunto<Lista<Pc> > Red::Auxminimos(Conjunto<Lista<Pc> > C){
-			Conjunto<Lista<Pc> > vacio = Conjunto<Lista<Pc> >();
-			if (C.EsVacio()){
-				return Conjunto<Lista<Pc> >();
-			}else if (C.Cardinal()==1){
+Conjunto<Lista<Pc> > Red::auxMinimos(Conjunto<Lista<Pc> > C){
+	Conjunto<Lista<Pc> > vacio;
+	if (C.EsVacio()){
+		return vacio;
+	}else if (C.Cardinal() == 1){
+			vacio.AgregarRapido(C.DameUno());
+			return vacio;
+		}else{ 
+			Conjunto<Lista<Pc> > aux = C; 
+			aux.SinUno();
+			if(C.DameUno().Longitud() < auxMinimos(aux).DameUno().Longitud()) {
 				vacio.AgregarRapido(C.DameUno());
-			}else{ 
-				Conjunto<Lista<Pc> > aux = C; 
-				aux.SinUno();
-				if(C.DameUno().Longitud() < Auxminimos(aux).DameUno().Longitud()) {
-					vacio.AgregarRapido(C.DameUno());
-				}else if (C.DameUno().Longitud() == Auxminimos(aux).DameUno().Longitud()) {
-					Auxminimos(aux).AgregarRapido(C.DameUno());
-				}else{
-					Auxminimos(aux);
-				}
-			}	
+				return vacio;
+			}else if (C.DameUno().Longitud() == auxMinimos(aux).DameUno().Longitud()) {
+				vacio = auxMinimos(aux);
+				vacio.AgregarRapido(C.DameUno());
+				return vacio;
+			}else{
+				return auxMinimos(aux);
+			}
+		}	
 			
-		}		
+}		
 
 bool Red::interfazUsada(const Pc& p1, const Interfaz i1) const{
 	Lista<Conexion>::const_Iterador it = conexiones.CrearIt();
-	
 	while (it.HaySiguiente()){
 		if((it.Siguiente().Prim() == p1.IP() && it.Siguiente().Seg() == i1) || (it.Siguiente().Ter() == p1.IP() && it.Siguiente().Cuar() == i1)){
 			return true;
@@ -244,11 +262,9 @@ bool Red::interfazUsada(const Pc& p1, const Interfaz i1) const{
 	return false;
 }
 
-
-
-
-
-
+bool Red::existeCamino(const Pc& p1, const Pc& p2){
+	return caminos(p1, p2).Cardinal() > 0;
+}
 
 
 
