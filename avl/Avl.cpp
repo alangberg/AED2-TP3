@@ -270,6 +270,7 @@ void Avl<T>::borrar(const T& clave){ // problemas con 1 y 2 nodos
 		if (n == raiz){
 			raiz = NULL;
 			delete n;
+			return;
 		} else {
 			padreAux = n->padre;
 			if (padreAux->der == n){

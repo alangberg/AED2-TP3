@@ -24,7 +24,10 @@ class Paquete // pasar pc por referencia ???? revisar el operador =
 		const Prioridad& prioridad() const;
 		const Pc& origen() const;
 		const Pc& destino() const;
-		bool operator<(const Paquete& otro) const;
+		bool operator<(const Paquete& otro) const; // corregir
+		bool operator>(const Paquete& otro) const; // corregir
+		bool operator==(const Paquete& otro) const; // corregir
+		bool operator!=(const Paquete& otro) const; // corregir		
 		Paquete& operator=(const Paquete& otro);
     private:
         Id id_paq;
@@ -65,13 +68,29 @@ Paquete& Paquete::operator=(const Paquete& otro) {
     return *this;
 }
 
+bool Paquete::operator<(const Paquete& otro) const{
+	return prior_paq > otro.prior_paq;
+}
+
+bool Paquete::operator>(const Paquete& otro) const{
+	return prior_paq < otro.prior_paq;
+}
+
+bool Paquete::operator==(const Paquete& otro) const{
+	return id_paq == otro.id_paq;
+}
+
+bool Paquete::operator!=(const Paquete& otro) const{
+	return id_paq != otro.id_paq;
+}
+
+
 ostream& operator << (ostream& os, const Paquete& p){
 	os << "{" << p.ID() << ";" << p.prioridad() << ";" << p.origen() << ";" << p.destino() << "}" <<endl;
 	return os;
 }
 
 };
-
 
 
 

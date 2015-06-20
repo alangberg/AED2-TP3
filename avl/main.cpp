@@ -10,11 +10,10 @@ using namespace std;
 
 int main() {
 	Avl<int> a;
-	a.insertar(383);
-	a.insertar(886);
-	a.insertar(777);
-	a.mostrar(cout);
-
+	a.insertar(5);
+	bool b = a.pertenece(5);
+	cout << b << endl;
+	a.borrar(5);
 
 	
 	return 0;
