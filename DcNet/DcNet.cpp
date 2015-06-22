@@ -21,7 +21,7 @@ void DcNet::anadirPaquete(const Paquete& p){ // deberia haber aliasing para que 
 	actual.caminos().definir(p,camRec);
 }
 
-Red DcNet::verRed() const{
+const Red DcNet::verRed() const{
 	return red;
 }
 
@@ -64,4 +64,35 @@ Lista<Pc> DcNet::recorrido(const Paquete& p) const{
 		it.Avanzar();			
 	}
 	return l;
+}
+
+
+void DcNet::avanzarSegundo(){
+	Conjunto<Pc>::const_Iterador it = red.mostrarComputadoras().CrearIt();
+	Lista<Tupla> aEnviar; //Lista< tuple<Paquete, Lista<Pc>, Pc> > aEnviar;
+	while (it.HaySiguiente()){
+		Definicion actual = pc_paquetes.Significado(it.Siguiente());
+		if (actual.xID().cardinal() != 0){
+			Paquete p = actual.xPrior().Desencolar();
+			Lista<Pc> l = actual.caminos().significado(p);
+			actual.xID().borrar(p);
+			actual.caminos().borrar(p);
+			Dicc<Pc,Pc> aux = siguientes.Significado(it.Siguiente());
+			Pc pct = aux.Significado(p.destino());
+			if (pct != p.destino()){
+				l.AgregarAtras(pct);
+				Tupla tp(p,l,pct);
+				aEnviar.AgregarAtras(tp);
+			}			
+		}
+		it.Avanzar();
+	}
+	Lista<Tupla>::const_Iterador itP = aEnviar.CrearIt();
+	while (itP.HaySiguiente()){
+		Definicion actual2 = pc_paquetes.Significado(itP.Siguiente().Ter());
+		actual2.xID().insertar(itP.Siguiente().Prim());
+		actual2.xPrior().Encolar(itP.Siguiente().Prim());
+		actual2.caminos().definir(itP.Siguiente().Prim(), itP.Siguiente().Seg());
+		itP.Avanzar();
+	}
 }

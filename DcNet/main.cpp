@@ -96,7 +96,7 @@ int main() {
 	DcNet dc(r);
 
 
-
+	cout << "fin" << endl;
 
 	
 
