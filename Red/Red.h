@@ -41,7 +41,7 @@ class Red
 		
 		bool interfazUsada(const Pc& p1, const Interfaz i1) const;
 		
-		Conjunto< Lista<Pc> > caminosMinimos(const Pc& p1, const Pc& p2);
+		Conjunto< Lista<Pc> > caminosMinimos(const Pc& p1, const Pc& p2) const;
 		
 		bool existeCamino(const Pc& p1, const Pc& p2);
 
@@ -84,13 +84,13 @@ class Red
         
         Dicc<Ip, Conjunto<Ip> > vecinos;
         
-        Lista<Conexion> conexiones; //FALTA COMPLETAR TUPLA PC,INTERFAZ,PC,INTERFAZ!!!!
+        Lista<Conexion> conexiones; 
 
-        Conjunto< Lista<Pc> > caminos(const Pc& p1, const Pc& p2);
+        Conjunto< Lista<Pc> > caminos(const Pc& p1, const Pc& p2) const;
 
-        Conjunto< Lista<Pc> > auxCaminos(const Pc& p1, const Pc& p2, Lista<Pc> recorrido, Conjunto<Pc> candidatos);	
+        Conjunto< Lista<Pc> > auxCaminos(const Pc& p1, const Pc& p2, Lista<Pc> recorrido, Conjunto<Pc> candidatos) const;	
 
-        Conjunto<Lista<Pc> > auxMinimos(Conjunto<Lista<Pc> > C);
+        Conjunto<Lista<Pc> > auxMinimos(Conjunto<Lista<Pc> > C) const;
 
 
 };
@@ -192,17 +192,17 @@ Conjunto<Pc> Red::conectadoCon(const Pc& p1) const{
 	return res;
 }
 
-Conjunto< Lista<Pc> > Red::caminosMinimos(const Pc& p1, const Pc& p2) {
+Conjunto< Lista<Pc> > Red::caminosMinimos(const Pc& p1, const Pc& p2) const {
 	return auxMinimos(caminos(p1, p2));
 }
 
-Conjunto< Lista<Pc> > Red::caminos(const Pc& p1, const Pc& p2){
+Conjunto< Lista<Pc> > Red::caminos(const Pc& p1, const Pc& p2) const{
 	Lista<Pc> recorrido;
 	recorrido.AgregarAdelante(p1);
 	return auxCaminos(p1, p2, recorrido, conectadoCon(p1));
 }
 
-Conjunto< Lista<Pc> > Red::auxCaminos(const Pc& p1, const Pc& p2, Lista<Pc> recorrido, Conjunto<Pc> candidatos) {
+Conjunto< Lista<Pc> > Red::auxCaminos(const Pc& p1, const Pc& p2, Lista<Pc> recorrido, Conjunto<Pc> candidatos) const {
 	if ( !(candidatos.EsVacio()) ){
 		if (recorrido.Ultimo() == p2){
 			Conjunto< Lista<Pc> > res;
@@ -227,7 +227,7 @@ Conjunto< Lista<Pc> > Red::auxCaminos(const Pc& p1, const Pc& p2, Lista<Pc> reco
 	}
 }
 
-Conjunto<Lista<Pc> > Red::auxMinimos(Conjunto<Lista<Pc> > C){
+Conjunto<Lista<Pc> > Red::auxMinimos(Conjunto<Lista<Pc> > C) const {
 	Conjunto<Lista<Pc> > vacio;
 	if (C.EsVacio()){
 		return vacio;

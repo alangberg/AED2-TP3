@@ -53,9 +53,9 @@ int main() {
 
 
 
-	Nat x = 1;
+	/*Nat x = 1;
 	Nat y = 22;
-	Paquete q = Paquete(x,y,a,b);
+	Paquete q = Paquete(x,y,a,b);*/
 	
 	Red r = Red();
 	r.agregarCompu(a);
@@ -78,12 +78,12 @@ int main() {
 	//cout << r.mostrarComputadoras() <<endl;
 
 
-	Lista<int> l;
+	/*Lista<int> l;
 	l.AgregarAdelante(5);
 	l.AgregarAdelante(12);
 	l.AgregarAdelante(3);
 	l.AgregarAdelante(4);
-
+*/
 	
 
 	//cout << r.caminosMinimos(e,c) <<endl;
@@ -93,12 +93,41 @@ int main() {
 
 
 	
-	DcNet dc(r);
+	/*Avl<Paquete> cavl = Avl<Paquete>();
+	cavl.insertar(q);
 
 
-	cout << "fin" << endl;
+
+
+	ColaPriorHeap<Paquete> cola = ColaPriorHeap<Paquete>();
+	cola.Encolar(q);
 
 	
+
+	Lista<Pc> lista = Lista<Pc>();
+	lista.AgregarAdelante(a);
+	lista.AgregarAdelante(b);
+	lista.AgregarAdelante(c);
+	lista.AgregarAdelante(d);
+
+
+	DiccAvl< Paquete, Lista<Pc> > caminos = DiccAvl< Paquete, Lista<Pc> >();
+	caminos.definir(q, lista);
+
+
+
+	Definicion def(cavl, cola, caminos);
+	
+	//caminos.borrar(q);
+	//def.caminos().borrar(q);
+
+	cout << def.caminos().definido(q) <<endl;
+
+	cout << r.caminosMinimos(a,c) <<endl;
+	cout << r.caminosMinimos(a,c).DameUno()[0] <<endl;
+
+*/
+	DcNet decenet(r);
 
 
 

@@ -31,7 +31,8 @@ class Definicion{ // pasar por referencia !!!
 
 Definicion::Definicion(){}
 
-Definicion::Definicion(const Avl<Paquete>& avl, const ColaPriorHeap<Paquete>& heap, const DiccAvl< Paquete, Lista<Pc> >& dicc) : xid(avl), xprior(heap), p_caminos(dicc), enviados(0){}
+Definicion::Definicion(const Avl<Paquete>& avl, const ColaPriorHeap<Paquete>& heap, const DiccAvl< Paquete, Lista<Pc> >& dicc) 
+: xid(avl), xprior(heap), p_caminos(dicc), enviados(0){}
 
 int Definicion::pEnviados() const{
 	return enviados;

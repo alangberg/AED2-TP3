@@ -3,12 +3,36 @@
 
 using namespace std;
 
-DcNet::DcNet(const Red& r){ // falta terminar
+DcNet::DcNet(const Red& r){ 
     red = r;
-    pc_masEnviados = r.mostrarComputadoras().DameUno();
     cant_MasEnviados = 0;
-    //siguientes = 
-
+    pc_paquetes = Dicc<Pc, Definicion>();
+    siguientes = Dicc<Pc, Dicc<Pc, Pc> >();
+    if (r.mostrarComputadoras().EsVacio()) {
+    	pc_masEnviados = Pc();
+    }else{
+    	pc_masEnviados = r.mostrarComputadoras().DameUno();
+    	Conjunto<Pc>::const_Iterador it1 = r.mostrarComputadoras().CrearIt();
+    	while (it1.HaySiguiente()) {
+    		Pc pc1 = it1.Siguiente();
+    		Avl<Paquete> xid;
+			ColaPriorHeap<Paquete> xprior;
+			DiccAvl<  Paquete, Lista<Pc> > p_caminos;
+			Definicion d(xid, xprior, p_caminos);
+			pc_paquetes.DefinirRapido(pc1, d);
+    		Conjunto<Pc>::const_Iterador it2 = r.mostrarComputadoras().CrearIt();
+    		Dicc<Pc, Pc> sig = Dicc<Pc, Pc>();
+    		while (it2.HaySiguiente()) {
+    			Pc pc2 = it2.Siguiente();
+    			if (pc1 != pc2 && !(r.caminosMinimos(pc1, pc2).EsVacio())) {
+    				sig.DefinirRapido(pc2, r.caminosMinimos(pc1, pc2).DameUno()[1]);
+    			}
+    			it2.Avanzar();
+    		}
+    		siguientes.DefinirRapido(pc1, sig);
+    		it1.Avanzar();
+        }
+    }
 }
 
 
