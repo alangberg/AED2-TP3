@@ -1,4 +1,5 @@
-#include <iostream> 
+#include <iostream>
+#include <cassert> 
 #include "DiccAvl.h"
 #include "math.h"
 using namespace std;
@@ -30,6 +31,7 @@ unsigned int DiccAvl<K,S>::cardinal() const {
 
 template<class K,class S>
 void DiccAvl<K,S>::mostrar(std::ostream& o) const { // sin repetidos
+	assert(cant != 0);	
     o << "[";
     Nodo* aux = raiz;
     while (aux->der != NULL){
@@ -179,6 +181,7 @@ void DiccAvl<K,S>::rebalanceo(Nodo* n){
 
 template<class K,class S>
 void DiccAvl<K,S>::definir(const K& clave, const S& significado){
+	assert(not definido(clave));
 	Nodo* nuevo = new Nodo(clave,significado);
 	Nodo* papa = raiz;
     if (raiz == NULL){
@@ -223,8 +226,9 @@ bool DiccAvl<K,S>::definido(const K& clave) const{
 
 template<class K,class S>
 S& DiccAvl<K,S>::significado(const K& clave){
-	  Nodo* aux = buscar(clave);
-	  return aux->sign;
+	assert(definido(clave));
+	Nodo* aux = buscar(clave);
+	return aux->sign;
 }
 
 
@@ -244,6 +248,7 @@ DiccAvl<K,S>::buscar(const K& clave) const {
 
 template<class K,class S>
 void DiccAvl<K,S>::borrar(const K& clave){
+	assert(definido(clave));
 	Nodo* n = buscar(clave);
 	Nodo* aux;
 	Nodo* padreAux;
@@ -278,6 +283,7 @@ void DiccAvl<K,S>::borrar(const K& clave){
 		if (n == raiz){
 			raiz = NULL;
 			delete n;
+			cant --;
 			return;
 		} else {
 			padreAux = n->padre;
@@ -289,6 +295,6 @@ void DiccAvl<K,S>::borrar(const K& clave){
 			delete n;
 		}
 	}
-
+	cant--;
 	rebalanceo(padreAux);
 }

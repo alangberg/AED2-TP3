@@ -9,6 +9,7 @@
 #include "../Conjunto/Conjunto.h"
 #include "../DcNet/Paquete.h"
 #include <ostream>
+#include <cassert> 
 using namespace std;
 namespace aed2
 {
@@ -126,6 +127,7 @@ const Conjunto<Pc> Red::mostrarComputadoras() const
 
 void Red::agregarCompu(const Pc& p)
 {
+	assert(not mostrarComputadoras().Pertenece(p));	
 	interfaces.DefinirRapido(p.IP(), p.Interfaces());
 	Conjunto<Ip> c;
 	vecinos.DefinirRapido(p.IP(), c);
@@ -133,6 +135,7 @@ void Red::agregarCompu(const Pc& p)
 
 void Red::conectar(const Pc& p1, const Interfaz i1, const Pc& p2, const Interfaz i2)
 {
+	assert(mostrarComputadoras().Pertenece(p1) && mostrarComputadoras().Pertenece(p2) && p1 != p2 && not interfazUsada(p1,i1) && not interfazUsada(p2,i2) && not estanConectadas(p1,p2));	
 	Ip ip1 = p1.IP();
 	Ip ip2 = p2.IP();
 	Conexion c(ip1, i1, ip2, i2);
@@ -159,12 +162,14 @@ void Red::conectar(const Pc& p1, const Interfaz i1, const Pc& p2, const Interfaz
 }
 
 bool Red::estanConectadas(const Pc& p1, const Pc& p2) const{
+	assert(mostrarComputadoras().Pertenece(p1) && mostrarComputadoras().Pertenece(p2));
 	Ip ip1 = p1.IP();
 	Ip ip2 = p2.IP();
 	return (vecinos.Significado(ip1)).Pertenece(ip2);
 }
 
 Interfaz Red::interfazQueUsan(const Pc& p1, const Pc& p2) const{
+	assert(mostrarComputadoras().Pertenece(p1) && mostrarComputadoras().Pertenece(p2) && estanConectadas(p1,p2));	
 	Lista<Conexion>::const_Iterador it = conexiones.CrearIt();
 	Ip ip1 = p1.IP();
 	Ip ip2 = p2.IP();
@@ -181,6 +186,7 @@ Interfaz Red::interfazQueUsan(const Pc& p1, const Pc& p2) const{
 }
 
 Conjunto<Pc> Red::conectadoCon(const Pc& p1) const{	
+	assert(mostrarComputadoras().Pertenece(p1));
 	Conjunto<Ip> c = vecinos.Significado(p1.IP());
 	Conjunto<Ip>::const_Iterador it = c.CrearIt();
 	Conjunto<Pc> res;
@@ -193,6 +199,7 @@ Conjunto<Pc> Red::conectadoCon(const Pc& p1) const{
 }
 
 Conjunto< Lista<Pc> > Red::caminosMinimos(const Pc& p1, const Pc& p2) const {
+	assert(mostrarComputadoras().Pertenece(p1) && mostrarComputadoras().Pertenece(p2));
 	return auxMinimos(caminos(p1, p2));
 }
 
@@ -263,6 +270,7 @@ bool Red::interfazUsada(const Pc& p1, const Interfaz i1) const{
 }
 
 bool Red::existeCamino(const Pc& p1, const Pc& p2){
+	assert(mostrarComputadoras().Pertenece(p1) && mostrarComputadoras().Pertenece(p2));
 	return caminos(p1, p2).Cardinal() > 0;
 }
 

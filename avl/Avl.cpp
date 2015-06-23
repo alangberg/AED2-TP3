@@ -1,6 +1,7 @@
 #include <iostream> 
 #include "Avl.h"
 #include "math.h"
+#include <cassert>
 using namespace std;
 
 
@@ -28,7 +29,8 @@ unsigned int Avl<T>::cardinal() const {
 
 
 template <class T>
-void Avl<T>::mostrar(std::ostream& o) const { // sin repetidos
+void Avl<T>::mostrar(std::ostream& o) const {
+	assert(cant != 0);	
     o << "[";
     Nodo* aux = raiz;
     while (aux->der != NULL){
@@ -178,6 +180,7 @@ void Avl<T>::rebalanceo(Nodo* n){
 
 template <class T>
 void Avl<T>::insertar(const T& clave){
+	assert(not pertenece(clave));	
 	Nodo* nuevo = new Nodo(clave);
 	Nodo* papa = raiz;
     if (raiz == NULL){
@@ -236,7 +239,8 @@ Avl<T>::buscar(const T& clave) const {
 
 
 template <class T>
-void Avl<T>::borrar(const T& clave){ // problemas con 1 y 2 nodos
+void Avl<T>::borrar(const T& clave){
+	assert(pertenece(clave));
 	Nodo* n = buscar(clave);
 	Nodo* aux;
 	Nodo* padreAux;
@@ -270,6 +274,7 @@ void Avl<T>::borrar(const T& clave){ // problemas con 1 y 2 nodos
 		if (n == raiz){
 			raiz = NULL;
 			delete n;
+			cant --;
 			return;
 		} else {
 			padreAux = n->padre;
@@ -281,7 +286,7 @@ void Avl<T>::borrar(const T& clave){ // problemas con 1 y 2 nodos
 			delete n;
 		}
 	}
-
+	cant--;
 	rebalanceo(padreAux);
 }
 

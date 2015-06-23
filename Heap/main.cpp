@@ -1,6 +1,6 @@
 #include <iostream>
 #include <cstdlib>
-#include "Heap.cpp"
+#include "Heap.h"
 
 
 using namespace std;

@@ -1,4 +1,5 @@
-#include <iostream> 
+#include <iostream>
+#include <cassert> 
 #include "DcNet.h"
 
 using namespace std;
@@ -38,6 +39,7 @@ DcNet::DcNet(const Red& r){
 
 
 void DcNet::anadirPaquete(const Paquete& p){ // deberia haber aliasing para que funcione
+	assert(red.mostrarComputadoras().Pertenece(p.origen()) && red.mostrarComputadoras().Pertenece(p.destino()) && red.existeCamino(p.origen(), p.destino()) && not enTransito(p));
 	Definicion actual = pc_paquetes.Significado(p.origen());
 	actual.xID().insertar(p);
 	actual.xPrior().Encolar(p);
@@ -51,10 +53,12 @@ const Red DcNet::verRed() const{
 }
 
 int DcNet::enviados(const Pc& p) const{
+	assert(red.mostrarComputadoras().Pertenece(p));
 	return pc_paquetes.Significado(p).pEnviados();
 }
 
 Avl<Paquete> DcNet::paquetes(const Pc& p) const{
+	assert(red.mostrarComputadoras().Pertenece(p));
 	return pc_paquetes.Significado(p).xID();
 }
 
@@ -76,6 +80,7 @@ bool DcNet::enTransito(const Paquete& p) const{
 
 
 Lista<Pc> DcNet::recorrido(const Paquete& p) const{
+	assert(enTransito(p));	
 	Dicc<Pc,Definicion>::const_Iterador it = pc_paquetes.CrearIt();
 	bool noEncontrado = true;
 	Definicion actual;

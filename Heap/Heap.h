@@ -228,7 +228,7 @@ return cant;
 
 template<typename T>
 T ColaPriorHeap<T>::Desencolar(){
-
+    assert(cant != 0);
     cant--;
 	T a = raiz->dato;
 	Nodo* ultimo;
