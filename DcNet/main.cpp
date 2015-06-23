@@ -129,6 +129,9 @@ int main() {
 */
 	DcNet decenet(r);
 
+	cout << decenet.enviados(b) << endl;
+
+
 
 
 

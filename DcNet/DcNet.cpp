@@ -12,7 +12,8 @@ DcNet::DcNet(const Red& r){
     	pc_masEnviados = Pc();
     }else{
     	pc_masEnviados = r.mostrarComputadoras().DameUno();
-    	Conjunto<Pc>::const_Iterador it1 = r.mostrarComputadoras().CrearIt();
+    	Conjunto<Pc> aux = r.mostrarComputadoras();
+    	Conjunto<Pc>::const_Iterador it1 = aux.CrearIt();
     	while (it1.HaySiguiente()) {
     		Pc pc1 = it1.Siguiente();
     		Avl<Paquete> xid;
@@ -20,7 +21,7 @@ DcNet::DcNet(const Red& r){
 			DiccAvl<  Paquete, Lista<Pc> > p_caminos;
 			Definicion d(xid, xprior, p_caminos);
 			pc_paquetes.DefinirRapido(pc1, d);
-    		Conjunto<Pc>::const_Iterador it2 = r.mostrarComputadoras().CrearIt();
+    		Conjunto<Pc>::const_Iterador it2 = aux.CrearIt();
     		Dicc<Pc, Pc> sig = Dicc<Pc, Pc>();
     		while (it2.HaySiguiente()) {
     			Pc pc2 = it2.Siguiente();
@@ -120,3 +121,4 @@ void DcNet::avanzarSegundo(){
 		itP.Avanzar();
 	}
 }
+
