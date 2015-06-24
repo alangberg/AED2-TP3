@@ -21,6 +21,7 @@ class Definicion{ // pasar por referencia !!!
 		Avl<Paquete> xID() const;
 		ColaPriorHeap<Paquete> xPrior() const;
 		DiccAvl< Paquete, Lista<Pc> > caminos() const;
+		void sumarUnoEnviados();
 
 	private:
 		Avl<Paquete> xid;
@@ -50,6 +51,8 @@ DiccAvl< Paquete, Lista<Pc> > Definicion::caminos() const{
 	return p_caminos;
 }
 
-
+void Definicion::sumarUnoEnviados(){
+	enviados++;
+}
 
 #endif

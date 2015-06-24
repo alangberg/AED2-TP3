@@ -68,7 +68,8 @@ Pc DcNet::masEnviados() const{
 
 
 bool DcNet::enTransito(const Paquete& p) const{
-	Conjunto<Pc>::const_Iterador it = red.mostrarComputadoras().CrearIt();
+	Conjunto<Pc> aux = red.mostrarComputadoras();
+	Conjunto<Pc>::const_Iterador it = aux.CrearIt();
 	bool noEncontrado = true;
 	while (noEncontrado && it.HaySiguiente()){
 		Definicion sig = pc_paquetes.Significado(it.Siguiente());
@@ -98,7 +99,8 @@ Lista<Pc> DcNet::recorrido(const Paquete& p) const{
 
 
 void DcNet::avanzarSegundo(){
-	Conjunto<Pc>::const_Iterador it = red.mostrarComputadoras().CrearIt();
+	Conjunto<Pc> auxiliar = red.mostrarComputadoras();
+	Conjunto<Pc>::const_Iterador it = auxiliar.CrearIt();
 	Lista<Tupla> aEnviar; //Lista< tuple<Paquete, Lista<Pc>, Pc> > aEnviar;
 	while (it.HaySiguiente()){
 		Definicion actual = pc_paquetes.Significado(it.Siguiente());
@@ -113,7 +115,13 @@ void DcNet::avanzarSegundo(){
 				l.AgregarAtras(pct);
 				Tupla tp(p,l,pct);
 				aEnviar.AgregarAtras(tp);
-			}			
+			}
+			actual.sumarUnoEnviados();
+			int cant = actual.pEnviados();			
+			if (cant_MasEnviados < cant){
+				cant_MasEnviados = cant;
+				pc_masEnviados = it.Siguiente();
+			}
 		}
 		it.Avanzar();
 	}
