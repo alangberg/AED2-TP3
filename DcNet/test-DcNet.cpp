@@ -85,49 +85,14 @@ int main() {
 
 	decenet.anadirPaquete(q);
 
-	//decenet.avanzarSegundo();
+	decenet.avanzarSegundo();
 	bool bo = decenet.enTransito(q);
 
 	cout << bo << endl;
-	//cout << decenet.enviados(a) << endl;
+	cout << decenet.enviados(a) << endl;
 
 
-
-	x = 5;
-	y = 22;
-	Paquete qq = Paquete(x,y,a,c);
-
-	x = 2;
-	y = 21;
-	Paquete qw = Paquete(x,y,a,c);
-
-	x = 3;
-	y = 22;
-	Paquete qe = Paquete(x,y,a,c);
-
-	x = 10;
-	y = 1;
-	Paquete qr = Paquete(x,y,a,c);
-
-	Avl<Paquete> av;
-	ColaPriorHeap<Paquete> col;
-	DiccAvl<  Paquete, Lista<Pc> > dic;
-
-	av.insertar(qq);
-	av.insertar(qw);
-	av.insertar(qe);
-	av.insertar(qr);
-	col.Encolar(qq);
-	col.Encolar(qw);
-	col.Encolar(qe);
-	col.Encolar(qr);
-	av.mostrar(cout);
-	Definicion defin(av,col,dic);
-	Avl<Paquete> aux = defin.xID();
-	aux.insertar(q);
-	defin.xID().mostrar(cout);
-
-
+	cout << "fin" << endl;
 
 	return 0;
 }
