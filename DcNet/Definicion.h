@@ -16,23 +16,23 @@ using namespace aed2;
 class Definicion{ // perdida de memoria?
 	public:
 		Definicion();
-		Definicion(Avl<Paquete>& avl, ColaPriorHeap<Paquete>& heap, DiccAvl< Paquete, Lista<Pc> >& dicc);
+		Definicion(Avl<Paquete>& avl, ColaPriorHeap& heap, DiccAvl< Paquete, Lista<Pc> >& dicc);
 		int* pEnviados() const;
 		Avl<Paquete>* xID() const;
-		ColaPriorHeap<Paquete>* xPrior() const;
+		ColaPriorHeap* xPrior() const;
 		DiccAvl< Paquete, Lista<Pc> >* caminos() const;
 		void sumarUnoEnviados();
 
 	private:
 		Avl<Paquete>* xid;
-		ColaPriorHeap<Paquete>* xprior;
+		ColaPriorHeap* xprior;
 		DiccAvl<  Paquete, Lista<Pc> >* p_caminos;
 		int* enviados;
 };
 
 Definicion::Definicion(){
 	xid = new Avl<Paquete>;
-	xprior =  new ColaPriorHeap<Paquete>;
+	xprior =  new ColaPriorHeap;
 	p_caminos = new DiccAvl<  Paquete, Lista<Pc> >;
 	enviados = new int(0);
 }
@@ -52,7 +52,7 @@ Avl<Paquete>* Definicion::xID() const{
 	return xid;
 }
 
-ColaPriorHeap<Paquete>*  Definicion::xPrior() const{
+ColaPriorHeap*  Definicion::xPrior() const{
 	return xprior;
 }
 

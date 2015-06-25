@@ -19,7 +19,7 @@ DcNet::DcNet(const Red& r){
     		Pc pc1 = it1.Siguiente();
     		/*
     		Avl<Paquete> xid;
-			ColaPriorHeap<Paquete> xprior;
+			ColaPriorHeap xprior;
 			DiccAvl<  Paquete, Lista<Pc> > p_caminos;
 			Definicion d(xid, xprior, p_caminos);
 			*/

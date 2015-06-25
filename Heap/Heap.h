@@ -1,17 +1,17 @@
 #include <iostream>
 #include <cassert>
 #include <math.h>
-
+#include "../DcNet/Paquete.h"
 using namespace std;
 
-template<typename T>
+
 class ColaPriorHeap{
 
     public:
         ColaPriorHeap();
-        void Encolar(const T& a);
+        void Encolar(const Paquete& a);
         bool EsVacia();
-        T Desencolar();
+        Paquete Desencolar();
         int Cantidad();
         //ColaPriorHeap<T>& operator=(const ColaPriorHeap<T>& otro);
 
@@ -21,7 +21,7 @@ class ColaPriorHeap{
 // Estructura del nodo, tiene un valor de tipo T, su altura, un puntero para cada uno de sus dos hijos y uno para su padre
 
         struct Nodo{
-            T dato;
+            Paquete dato;
             Nodo* izq;
             Nodo* der;
             Nodo* padre;
@@ -30,15 +30,15 @@ class ColaPriorHeap{
 
 // Funcion para ver si un elemento tiene mas prioridad que otro
 
-        bool mayorPrioridad(T& dato1, T& dato2){
-            return (dato1 > dato2);
+        bool mayorPrioridad(Paquete& dato1, Paquete& dato2){
+            return (dato1.prioridad() < dato2.prioridad());
         }
 
 // Funcion para cambiar los valores dados dos nodos
 
         void swapear(Nodo* papa, Nodo* n){
 
-        T aux = papa->dato;
+        Paquete aux = papa->dato;
         papa->dato = n->dato;
         n->dato = aux;
    		}
@@ -134,8 +134,8 @@ class ColaPriorHeap{
 // Constructor por defecto
 //________________________________________________________________
 
-template<typename T>
-ColaPriorHeap<T>::ColaPriorHeap(){
+
+ColaPriorHeap::ColaPriorHeap(){
     raiz = NULL;
     padreult = NULL;
     cant = 0;
@@ -144,8 +144,8 @@ ColaPriorHeap<T>::ColaPriorHeap(){
 // Funcion para encolar un elemnto
 //________________________________________________________________
 
-template<typename T>
-void ColaPriorHeap<T>::Encolar(const T& a){
+
+void ColaPriorHeap::Encolar(const Paquete& a){
 
 // Creo el nodo con los datos 
 
@@ -153,7 +153,7 @@ void ColaPriorHeap<T>::Encolar(const T& a){
     n->izq = NULL;
     n->der = NULL;
     n->padre = NULL;
-    n->dato = T(a);
+    n->dato = a;
     n->alt = 1;
     cant++;
 
@@ -218,19 +218,19 @@ void ColaPriorHeap<T>::Encolar(const T& a){
 // Cantidad
 //________________________________________________________________
 
-template<typename T>
-int ColaPriorHeap<T>::Cantidad(){
+
+int ColaPriorHeap::Cantidad(){
 return cant;
 }
 
 // Funcion para Desencolar
 //________________________________________________________________
 
-template<typename T>
-T ColaPriorHeap<T>::Desencolar(){
+
+Paquete ColaPriorHeap::Desencolar(){
     assert(cant != 0);
     cant--;
-	T a = raiz->dato;
+	Paquete a = raiz->dato;
 	Nodo* ultimo;
 
 // Me fijo si padreult es nulo o no, basicamente si el heap tiene 3 elementos (no hay padreult) o si tiene mas

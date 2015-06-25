@@ -69,11 +69,11 @@ Paquete& Paquete::operator=(const Paquete& otro) {
 }
 
 bool Paquete::operator<(const Paquete& otro) const{
-	return prior_paq > otro.prior_paq;
+	return id_paq < otro.id_paq;
 }
 
 bool Paquete::operator>(const Paquete& otro) const{
-	return prior_paq < otro.prior_paq;
+	return id_paq > otro.id_paq;
 }
 
 bool Paquete::operator==(const Paquete& otro) const{
