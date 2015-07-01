@@ -146,7 +146,7 @@ int main() {
 	//decenet.avanzarSegundo();
 	bool bo = decenet.enTransito(q);
 	cout << bo << endl;
-	//cout << decenet.enviados(a) << endl;
+	cout << decenet.enviados(a) << endl;
 
 
 
