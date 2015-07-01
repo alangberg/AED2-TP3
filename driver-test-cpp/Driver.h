@@ -24,7 +24,7 @@ class Driver
         Nat CantidadInterfacesDe(const Computadora& c) const;
         const Interfaz& IesimaInterfazDe(const Computadora& c, const Nat i) const ;
 
-        const Interfaz& IntefazUsada(const Computadora& c1, const Computadora& c2) const;
+        const Interfaz& InterfazUsada(const Computadora& c1, const Computadora& c2) const;
 
         bool conectadas(const Computadora& c1, const Computadora& c2) const;
 
@@ -38,12 +38,12 @@ class Driver
        /// Observadores DCNet //////////////////////////////////////////////////////////////
     
         Nat CantidadNodosRecorridosPor(const Pakete& p) const;
-        const Computadora& IesimoNodoRecorridoPor(const Pakete& p) const;
+        const Computadora& IesimoNodoRecorridoPor(const Pakete& p, const Nat i) const;
 
         Nat CantidadEnviadosPor(const Computadora& c) const;
     
         Nat CantidadEnEsperaEn(const Computadora& c) const;
-        const Pakete& IesimoEnEsperaEn(const Computadora& c) const;
+        const Pakete& IesimoEnEsperaEn(const Computadora& c1, const Nat i) const;
 
         /// Acciones DCNet ////////////////////////////////////////////////////////////
 
@@ -61,7 +61,8 @@ class Driver
     private:
 
     	DcNet d;
-    	int id_paquetes;
+    	Nat id_paquetes;
+        Conjunto<Paquete> c;
 
     /*********************************************************************
      * TODO: Va a ser necesario instanciar privadamente un Modulo DCNet *
