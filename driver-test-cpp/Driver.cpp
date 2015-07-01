@@ -46,6 +46,7 @@ const Interfaz& Driver::IntefazUsada(const Computadora& c1, const Computadora& c
 }
 
 bool Driver::conectadas(const Computadora& c1, const Computadora& c2) const {
+<<<<<<< HEAD
     Conjunto<Pc> aux = d.verRed().mostrarComputadoras();
     Conjunto<Pc>::const_Iterador it = aux.CrearIt();
     while( c1 != it.Siguiente().IP() ){
@@ -58,6 +59,9 @@ bool Driver::conectadas(const Computadora& c1, const Computadora& c2) const {
     }
     Pc pc2 = it2.Siguiente();
     d.verRed().estanConectadas(pc1, pc2);
+=======
+    // TODO
+>>>>>>> 7d02fa4d4eea9c3dca578941781243c8983a538c
     return 0;
 }
 
@@ -71,6 +75,7 @@ void Driver::AgregarComputadora(const Computadora& ip, const Conjunto<Interfaz>&
 }
         
 void Driver::Conectar(const Computadora& c1, const Interfaz& i1, const Computadora& c2, const Interfaz& i2) {
+<<<<<<< HEAD
     Conjunto<Pc> aux = d.verRed().mostrarComputadoras();
     Conjunto<Pc>::const_Iterador it = aux.CrearIt();
     while( c1 != it.Siguiente().IP() ){
@@ -86,6 +91,9 @@ void Driver::Conectar(const Computadora& c1, const Interfaz& i1, const Computado
     r.conectar(pc1, i1, pc2, i2);
     DcNet nuevo(r);
     d = nuevo;
+=======
+    // TODO
+>>>>>>> 7d02fa4d4eea9c3dca578941781243c8983a538c
 }
 	
 	

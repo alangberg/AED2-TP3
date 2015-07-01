@@ -19,6 +19,7 @@ int main()
 	Ip n1 = "pc1";
 
 	d.AgregarComputadora(n1, conj1);
+<<<<<<< HEAD
 
 	Conjunto<Interfaz> conj2;
 	conj2.Agregar(12);
@@ -37,6 +38,11 @@ int main()
 	
  	cout << d.CantidadComputadoras()<<endl;
 
+=======
+	
+ 	cout << d.CantidadComputadoras()<<endl;
+	
+>>>>>>> 7d02fa4d4eea9c3dca578941781243c8983a538c
 
 	cout << "fin" << endl;
 	return 0;
