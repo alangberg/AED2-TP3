@@ -4,6 +4,8 @@
 
 using namespace std;
 
+DcNet::DcNet(){}
+
 DcNet::DcNet(const Red& r){ 
     red = r;
     cant_MasEnviados = 0;
@@ -17,12 +19,6 @@ DcNet::DcNet(const Red& r){
     	Conjunto<Pc>::const_Iterador it1 = aux.CrearIt();
     	while (it1.HaySiguiente()) {
     		Pc pc1 = it1.Siguiente();
-    		/*
-    		Avl<Paquete> xid;
-			ColaPriorHeap xprior;
-			DiccAvl<  Paquete, Lista<Pc> > p_caminos;
-			Definicion d(xid, xprior, p_caminos);
-			*/
 			Definicion d;
 			pc_paquetes.DefinirRapido(pc1, d);
     		Conjunto<Pc>::const_Iterador it2 = aux.CrearIt();
@@ -138,3 +134,10 @@ void DcNet::avanzarSegundo(){
 	}
 }
 
+DcNet& DcNet::operator=(const DcNet& otro){
+	pc_paquetes = otro.pc_paquetes;
+	pc_masEnviados = otro.pc_masEnviados;
+	cant_MasEnviados = otro.cant_MasEnviados;
+	red = otro.red;
+	siguientes = otro.siguientes;
+}

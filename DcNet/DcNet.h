@@ -14,6 +14,7 @@ using namespace aed2;
 class DcNet
 {
     public:
+        DcNet();
         DcNet(const Red&);  
         void anadirPaquete(const Paquete&);
         void avanzarSegundo();
@@ -23,6 +24,8 @@ class DcNet
         Avl<Paquete> paquetes(const Pc&) const;
         bool enTransito(const Paquete&) const;
         Pc masEnviados() const;
+        DcNet& operator=(const DcNet& otro);
+
     private:
         struct Tupla {           
 
