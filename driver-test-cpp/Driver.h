@@ -37,13 +37,13 @@ class Driver
 
        /// Observadores DCNet //////////////////////////////////////////////////////////////
     
-        Nat CantidadNodosRecorridosPor(const Pakete& p) const;
-        const Computadora& IesimoNodoRecorridoPor(const Pakete& p, const Nat i) const;
+        Nat CantidadNodosRecorridosPor(const Pakete& p) ;
+        const Computadora& IesimoNodoRecorridoPor(const Pakete& p, const Nat i);
 
-        Nat CantidadEnviadosPor(const Computadora& c) const;
+        Nat CantidadEnviadosPor(const Computadora& c) ;
     
-        Nat CantidadEnEsperaEn(const Computadora& c) const;
-        const Pakete& IesimoEnEsperaEn(const Computadora& c1, const Nat i) const;
+        Nat CantidadEnEsperaEn(const Computadora& c) ;
+        const Pakete& IesimoEnEsperaEn(const Computadora& c1, const Nat i) ;
 
         /// Acciones DCNet ////////////////////////////////////////////////////////////
 
@@ -51,7 +51,7 @@ class Driver
         
         void AvanzarSegundo();
         
-        const Computadora& laQueMasEnvio() const;
+        const Computadora& laQueMasEnvio() ;
         
         // Auxiliares para ver los Paketes
         const Computadora& origen(const Pakete& p) const; 

@@ -115,7 +115,7 @@ void Driver::Conectar(const Computadora& c1, const Interfaz& i1, const Computado
 }
 	
 	
-Nat Driver::CantidadNodosRecorridosPor(const Pakete& p) const {
+Nat Driver::CantidadNodosRecorridosPor(const Pakete& p)  {
     Conjunto<Paquete>::const_Iterador it = c.CrearIt();
     while( p != it.Siguiente().ID() ){
         it.Avanzar();
@@ -124,7 +124,7 @@ Nat Driver::CantidadNodosRecorridosPor(const Pakete& p) const {
     return d.recorrido(aux).Longitud();
 }
 
-const Computadora& Driver::IesimoNodoRecorridoPor(const Pakete& p, const Nat i) const {
+const Computadora& Driver::IesimoNodoRecorridoPor(const Pakete& p, const Nat i) {
     Conjunto<Paquete>::const_Iterador it = c.CrearIt();
     while( p != it.Siguiente().ID() ){
         it.Avanzar();
@@ -134,7 +134,7 @@ const Computadora& Driver::IesimoNodoRecorridoPor(const Pakete& p, const Nat i) 
     return a.IP();
 }
 
-Nat Driver::CantidadEnviadosPor(const Computadora& c) const {
+Nat Driver::CantidadEnviadosPor(const Computadora& c)  {
     Conjunto<Pc> aux = d.verRed().mostrarComputadoras();
     Conjunto<Pc>::const_Iterador it = aux.CrearIt();
     while( c != it.Siguiente().IP() ){
@@ -144,7 +144,7 @@ Nat Driver::CantidadEnviadosPor(const Computadora& c) const {
     return d.enviados(pc1);
 }
 	
-Nat Driver::CantidadEnEsperaEn(const Computadora& c) const {
+Nat Driver::CantidadEnEsperaEn(const Computadora& c)  {
     Conjunto<Pc> aux = d.verRed().mostrarComputadoras();
     Conjunto<Pc>::const_Iterador it = aux.CrearIt();
     while( c != it.Siguiente().IP() ){
@@ -154,7 +154,7 @@ Nat Driver::CantidadEnEsperaEn(const Computadora& c) const {
     return d.paquetes(pc1).cardinal();
 }
 
-const Pakete& Driver::IesimoEnEsperaEn(const Computadora& c1, const Nat i) const {
+const Pakete& Driver::IesimoEnEsperaEn(const Computadora& c1, const Nat i)  {
     Conjunto<Pc> aux = d.verRed().mostrarComputadoras();
     Conjunto<Pc>::const_Iterador it = aux.CrearIt();
     while( c1 != it.Siguiente().IP() ){
@@ -199,7 +199,7 @@ void Driver::AvanzarSegundo() {
     d.avanzarSegundo();
 }
 		
-const Computadora& Driver::laQueMasEnvio() const {
+const Computadora& Driver::laQueMasEnvio() {
     Computadora res = d.masEnviados().IP();
     return res;
 }

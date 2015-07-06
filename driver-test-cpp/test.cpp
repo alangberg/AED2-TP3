@@ -1,8 +1,8 @@
-#include "Driver.h"
+#include "Driver.cpp"
 #include "mini_test.h"
-#include "aed2/Lista.h"
-#include "aed2/Conj.h"
-#include "aed2/Dicc.h"
+#include "../Conjunto/Lista.h"
+#include "../Conjunto/Conjunto.h"
+#include "../Conjunto/Dicc.h"
 
 #include <string>
 #include <iostream>
@@ -24,7 +24,7 @@ std::string to_str(const T& t)
 
 /**
  * Esta función se puede utilizar para comparar dos colecciones
- * iterables que representen conjuntos, es decir, que no tengan 
+ * iterables que representen Conjuntountos, es decir, que no tengan 
  * elementos repetidos.
  */
 template<typename T, typename S>
@@ -87,20 +87,20 @@ bool Comparar(const T& t, const S& s)
  */
  
 void test_dcnet_ejemplo() {
-	Conj<Interfaz> conjIc1;
-	Conj<Interfaz> conjIc2;
-	Conj<Interfaz> conjIc3;
+	Conjunto<Interfaz> ConjuntoIc1;
+	Conjunto<Interfaz> ConjuntoIc2;
+	Conjunto<Interfaz> ConjuntoIc3;
 	
-	conjIc1.Agregar(1);
-	conjIc1.Agregar(2);
-	conjIc1.Agregar(3);
+	ConjuntoIc1.Agregar(1);
+	ConjuntoIc1.Agregar(2);
+	ConjuntoIc1.Agregar(3);
 	
-	conjIc2.Agregar(1);
-	conjIc2.Agregar(2);
-	conjIc2.Agregar(3);
+	ConjuntoIc2.Agregar(1);
+	ConjuntoIc2.Agregar(2);
+	ConjuntoIc2.Agregar(3);
 	
-	conjIc3.Agregar(1);
-	conjIc3.Agregar(2);
+	ConjuntoIc3.Agregar(1);
+	ConjuntoIc3.Agregar(2);
 	
 	Computadora c1 = "dc.uba.ar";
 	Computadora c2 = "uba.ar";
@@ -108,9 +108,9 @@ void test_dcnet_ejemplo() {
 	
 	Driver dcnet;
 	
-	dcnet.AgregarComputadora(c1, conjIc1);
-	dcnet.AgregarComputadora(c2, conjIc2);
-	dcnet.AgregarComputadora(c3, conjIc3);
+	dcnet.AgregarComputadora(c1, ConjuntoIc1);
+	dcnet.AgregarComputadora(c2, ConjuntoIc2);
+	dcnet.AgregarComputadora(c3, ConjuntoIc3);
 	
 	// ejemplo - Indexado en 0 
 	Interfaz i1 = dcnet.IesimaInterfazDe(c1, 0); 

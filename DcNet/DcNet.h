@@ -6,6 +6,7 @@
 #include "Definicion.h"
 #include "../Red/Red.h"
 #include "../Conjunto/Conjunto.h"
+#include "../Conjunto/DiccTrie.h"
 #include "../avl/DiccAvl.h"
 using namespace std;
 using namespace aed2;
@@ -19,12 +20,12 @@ class DcNet
         void anadirPaquete(const Paquete&);
         void avanzarSegundo();
         const Red verRed() const;
-        Lista<Pc> recorrido(const Paquete&) const;
-        int enviados(const Pc&) const;
-        Avl<Paquete> paquetes(const Pc&) const;
-        bool enTransito(const Paquete&) const;
+        Lista<Pc> recorrido(const Paquete&);
+        int enviados(const Pc&);
+        Avl<Paquete> paquetes(const Pc&);
+        bool enTransito(const Paquete&);
         Pc masEnviados() const;
-        DcNet& operator=(const DcNet& otro);
+        DcNet& operator=( DcNet& otro);
 
     private:
         struct Tupla {           
@@ -50,11 +51,11 @@ class DcNet
         };
 
 
-        Dicc<Pc,Definicion> pc_paquetes; //DiccTrie<Pc,Definicion> pc_paquetes;
+        DiccString<Definicion> pc_paquetes;
         Pc pc_masEnviados;
         int cant_MasEnviados;
         Red red;
-        Dicc< Pc,Dicc<Pc,Pc> > siguientes; // DiccTrie. avl no respetaba complejidad
+        DiccString<DiccString<Pc> > siguientes; 
 };
 
 

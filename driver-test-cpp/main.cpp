@@ -73,6 +73,9 @@ int main()
 
 	Prioridad prio = d.prioridad(0);
 	cout << prio << endl;
+
+	cout << "hecho" << endl;
+
 	
 	return 0;
 }

@@ -9,8 +9,8 @@ DcNet::DcNet(){}
 DcNet::DcNet(const Red& r){ 
     red = r;
     cant_MasEnviados = 0;
-    pc_paquetes = Dicc<Pc, Definicion>();
-    siguientes = Dicc<Pc, Dicc<Pc, Pc> >();
+    pc_paquetes;
+    siguientes;
     if (r.mostrarComputadoras().EsVacio()) {
     	pc_masEnviados = Pc();
     }else{
@@ -20,26 +20,27 @@ DcNet::DcNet(const Red& r){
     	while (it1.HaySiguiente()) {
     		Pc pc1 = it1.Siguiente();
 			Definicion d;
-			pc_paquetes.DefinirRapido(pc1, d);
+			pc_paquetes.definir(pc1.IP(), d);
     		Conjunto<Pc>::const_Iterador it2 = aux.CrearIt();
-    		Dicc<Pc, Pc> sig = Dicc<Pc, Pc>();
+    		DiccString<Pc> sig;
     		while (it2.HaySiguiente()) {
     			Pc pc2 = it2.Siguiente();
     			if (pc1 != pc2 && !(r.caminosMinimos(pc1, pc2).EsVacio())) {
-    				sig.DefinirRapido(pc2, r.caminosMinimos(pc1, pc2).DameUno()[1]);
+    				Pc pc3 = r.caminosMinimos(pc1, pc2).DameUno()[1];
+    				sig.definir(pc2.IP(), pc3);
     			}
     			it2.Avanzar();
     		}
-    		siguientes.DefinirRapido(pc1, sig);
+    		siguientes.definir(pc1.IP(), sig);
     		it1.Avanzar();
         }
     }
 }
 
 
-void DcNet::anadirPaquete(const Paquete& p){ // deberia haber aliasing para que funcione
+void DcNet::anadirPaquete(const Paquete& p){
 	assert(red.mostrarComputadoras().Pertenece(p.origen()) && red.mostrarComputadoras().Pertenece(p.destino()) && red.existeCamino(p.origen(), p.destino()) && not enTransito(p));
-	Definicion actual = pc_paquetes.Significado(p.origen());
+	Definicion actual = *pc_paquetes.obtener(p.origen().IP());
 	actual.xID()->insertar(p);
 	actual.xPrior()->Encolar(p);
 	Lista<Pc> camRec;
@@ -51,14 +52,14 @@ const Red DcNet::verRed() const{
 	return red;
 }
 
-int DcNet::enviados(const Pc& p) const{
+int DcNet::enviados(const Pc& p) {
 	assert(red.mostrarComputadoras().Pertenece(p));
-	return *pc_paquetes.Significado(p).pEnviados();
+	return *pc_paquetes.obtener(p.IP())->pEnviados();
 }
 
-Avl<Paquete> DcNet::paquetes(const Pc& p) const{
+Avl<Paquete> DcNet::paquetes(const Pc& p){
 	assert(red.mostrarComputadoras().Pertenece(p));
-	return *pc_paquetes.Significado(p).xID();
+	return *pc_paquetes.obtener(p.IP())->xID();
 }
 
 Pc DcNet::masEnviados() const{
@@ -66,12 +67,12 @@ Pc DcNet::masEnviados() const{
 }
 
 
-bool DcNet::enTransito(const Paquete& p) const{
+bool DcNet::enTransito(const Paquete& p){
 	Conjunto<Pc> aux = red.mostrarComputadoras();
 	Conjunto<Pc>::const_Iterador it = aux.CrearIt();
 	bool noEncontrado = true;
 	while (noEncontrado && it.HaySiguiente()){
-		Definicion sig = pc_paquetes.Significado(it.Siguiente());
+		Definicion sig = *pc_paquetes.obtener(it.Siguiente().IP());
 		noEncontrado = !(sig.xID()->pertenece(p));
 		it.Avanzar();
 	}
@@ -79,19 +80,20 @@ bool DcNet::enTransito(const Paquete& p) const{
 }
 
 
-Lista<Pc> DcNet::recorrido(const Paquete& p) const{
+Lista<Pc> DcNet::recorrido(const Paquete& p){
 	assert(enTransito(p));	
-	Dicc<Pc,Definicion>::const_Iterador it = pc_paquetes.CrearIt();
+	DiccString<Definicion>::Iterador it(&pc_paquetes);
+	//Dicc<Pc,Definicion>::const_Iterador it = pc_paquetes.CrearIt();
 	bool noEncontrado = true;
 	Definicion actual;
 	Lista<Pc> l;
-	while (noEncontrado && it.HaySiguiente()){
-		actual = it.SiguienteSignificado();
+	while (noEncontrado){
+		actual = *it.valorActual();
 		if (actual.caminos()->definido(p)){
 			noEncontrado = false;
 			l = actual.caminos()->significado(p);
 		}
-		it.Avanzar();			
+		it.avanzar();			
 	}
 	return l;
 }
@@ -102,14 +104,14 @@ void DcNet::avanzarSegundo(){
 	Conjunto<Pc>::const_Iterador it = auxiliar.CrearIt();
 	Lista<Tupla> aEnviar; //Lista< tuple<Paquete, Lista<Pc>, Pc> > aEnviar;
 	while (it.HaySiguiente()){
-		Definicion actual = pc_paquetes.Significado(it.Siguiente());
+		Definicion actual = *pc_paquetes.obtener(it.Siguiente().IP());
 		if (actual.xID()->cardinal() != 0){
 			Paquete p = actual.xPrior()->Desencolar();
 			Lista<Pc> l = actual.caminos()->significado(p);
 			actual.xID()->borrar(p);
 			actual.caminos()->borrar(p);
-			Dicc<Pc,Pc> aux = siguientes.Significado(it.Siguiente());
-			Pc pct = aux.Significado(p.destino());
+			DiccString<Pc> aux = *siguientes.obtener(it.Siguiente().IP());
+			Pc pct = *aux.obtener(p.destino().IP());
 			if (pct != p.destino()){
 				l.AgregarAtras(pct);
 				Tupla tp(p,l,pct);
@@ -126,7 +128,7 @@ void DcNet::avanzarSegundo(){
 	}
 	Lista<Tupla>::const_Iterador itP = aEnviar.CrearIt();
 	while (itP.HaySiguiente()){
-		Definicion actual2 = pc_paquetes.Significado(itP.Siguiente().Ter());
+		Definicion actual2 = *pc_paquetes.obtener(itP.Siguiente().Ter().IP());
 		actual2.xID()->insertar(itP.Siguiente().Prim());
 		actual2.xPrior()->Encolar(itP.Siguiente().Prim());
 		actual2.caminos()->definir(itP.Siguiente().Prim(), itP.Siguiente().Seg());
@@ -134,7 +136,7 @@ void DcNet::avanzarSegundo(){
 	}
 }
 
-DcNet& DcNet::operator=(const DcNet& otro){
+DcNet& DcNet::operator=(DcNet& otro){
 	pc_paquetes = otro.pc_paquetes;
 	pc_masEnviados = otro.pc_masEnviados;
 	cant_MasEnviados = otro.cant_MasEnviados;
