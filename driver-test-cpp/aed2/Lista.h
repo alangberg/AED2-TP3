@@ -45,6 +45,7 @@ class Lista
   /// Opreaciones básicas
   bool EsVacia() const;
   Nat Longitud() const;
+  bool Esta(const T& elem) const;
 
   /// Acceso al primero y último elemento (en O(1) )
   /// Versiones modificables y no modificables
@@ -238,6 +239,18 @@ template <typename T>
 Nat Lista<T>::Longitud() const
 {
   return longitud_;
+}
+
+template <typename T>
+bool Lista<T>::Esta(const T& elem) const
+{
+  bool noEncontrado = true;
+  const_Iterador it = CrearIt();
+  while (noEncontrado && it.HaySiguiente()){
+    noEncontrado = !(it.Siguiente() == elem);
+    it.Avanzar();
+  } 
+  return !noEncontrado;
 }
 
 template <typename T>

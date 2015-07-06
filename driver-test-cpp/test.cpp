@@ -87,9 +87,9 @@ bool Comparar(const T& t, const S& s)
  */
  
 void test_dcnet_ejemplo() {
-	Conjunto<Interfaz> ConjuntoIc1;
-	Conjunto<Interfaz> ConjuntoIc2;
-	Conjunto<Interfaz> ConjuntoIc3;
+	Conj<Interfaz> ConjuntoIc1;
+	Conj<Interfaz> ConjuntoIc2;
+	Conj<Interfaz> ConjuntoIc3;
 	
 	ConjuntoIc1.Agregar(1);
 	ConjuntoIc1.Agregar(2);

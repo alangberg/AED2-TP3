@@ -6,7 +6,7 @@
 #ifndef AED2_CONJUNTO_H_INCLUDED
 #define	AED2_CONJUNTO_H_INCLUDED
 
-#include "Dicc.h"
+#include "../driver-test-cpp/aed2/Dicc.h"
 
 #include <ostream>
 
