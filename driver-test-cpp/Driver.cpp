@@ -5,8 +5,8 @@ namespace aed2 {
 
 Driver::Driver(){
 	DcNet d;
-	id_paquetes = 0;
-    Conjunto<Paquete> c;  
+	id_Paketes = 0;
+    Conjunto<Pakete> c;  
 }
 
 
@@ -56,7 +56,7 @@ const Interfaz& Driver::IesimaInterfazDe(const Computadora& c, const Nat i) cons
     return inter;
 } 
 
-const Interfaz& Driver::InterfazUsada(const Computadora& c1, const Computadora& c2) const {
+const Interfaz& Driver::IntefazUsada(const Computadora& c1, const Computadora& c2) const {
     Conjunto<Pc> aux = d.verRed().mostrarComputadoras();
     Conjunto<Pc>::const_Iterador it = aux.CrearIt();
     while( c1 != it.Siguiente().IP() ){
@@ -88,8 +88,14 @@ bool Driver::conectadas(const Computadora& c1, const Computadora& c2) const {
 }
 
 // TAD DCNET
-void Driver::AgregarComputadora(const Computadora& ip, const Conjunto<Interfaz>& ci) {
-    Pc izipc(ip, ci);
+void Driver::AgregarComputadora(const Computadora& ip, const Conj<Interfaz>& ci) {
+    Conj<Interfaz>::const_Iterador it = ci.CrearIt();
+    Conjunto<Interfaz> con;
+    while (it.HaySiguiente()){
+        con.AgregarRapido(it.Siguiente());
+        it.Avanzar();
+    }
+    Pc izipc(ip, con);
     Red r = d.verRed();
     r.agregarCompu(izipc);
     DcNet aux(r);
@@ -115,21 +121,21 @@ void Driver::Conectar(const Computadora& c1, const Interfaz& i1, const Computado
 }
 	
 	
-Nat Driver::CantidadNodosRecorridosPor(const Pakete& p)  {
-    Conjunto<Paquete>::const_Iterador it = c.CrearIt();
+Nat Driver::CantidadNodosRecorridosPor(const Paquete& p)  {
+    Conjunto<Pakete>::const_Iterador it = c.CrearIt();
     while( p != it.Siguiente().ID() ){
         it.Avanzar();
     }
-    Paquete aux = it.Siguiente();
+    Pakete aux = it.Siguiente();
     return d.recorrido(aux).Longitud();
 }
 
-const Computadora& Driver::IesimoNodoRecorridoPor(const Pakete& p, const Nat i) {
-    Conjunto<Paquete>::const_Iterador it = c.CrearIt();
+const Computadora& Driver::IesimoNodoRecorridoPor(const Paquete& p, const Nat i) {
+    Conjunto<Pakete>::const_Iterador it = c.CrearIt();
     while( p != it.Siguiente().ID() ){
         it.Avanzar();
     }
-    Paquete aux = it.Siguiente();
+    Pakete aux = it.Siguiente();
     Pc a = d.recorrido(aux)[i];
     return a.IP();
 }
@@ -151,21 +157,21 @@ Nat Driver::CantidadEnEsperaEn(const Computadora& c)  {
         it.Avanzar();
     }
     Pc pc1 = it.Siguiente();
-    return d.paquetes(pc1).cardinal();
+    return d.Paketes(pc1).cardinal();
 }
 
-const Pakete& Driver::IesimoEnEsperaEn(const Computadora& c1, const Nat i)  {
+const Paquete& Driver::IesimoEnEsperaEn(const Computadora& c1, const Nat i)  {
     Conjunto<Pc> aux = d.verRed().mostrarComputadoras();
     Conjunto<Pc>::const_Iterador it = aux.CrearIt();
     while( c1 != it.Siguiente().IP() ){
         it.Avanzar();
     }
     Pc pc1 = it.Siguiente();
-    Avl<Paquete> paquetesEn = d.paquetes(pc1);
+    Avl<Pakete> PaketesEn = d.Paketes(pc1);
     ColaPriorHeap cola;
-    Conjunto<Paquete>::const_Iterador it2 = c.CrearIt();
+    Conjunto<Pakete>::const_Iterador it2 = c.CrearIt();
     while (it2.HaySiguiente()){
-        if ( paquetesEn.pertenece(it2.Siguiente()) ){
+        if ( PaketesEn.pertenece(it2.Siguiente()) ){
             cola.Encolar(it2.Siguiente());    
         } 
         it2.Avanzar(); 
@@ -173,11 +179,11 @@ const Pakete& Driver::IesimoEnEsperaEn(const Computadora& c1, const Nat i)  {
     for (int j = 0; j < i ; j++){
         cola.Desencolar();
     }
-    Paquete p = cola.Desencolar();
+    Pakete p = cola.Desencolar();
     return p.ID();
 }
 
-void Driver::CrearPaquete(const Computadora& origen, const Computadora& destino, Nat prioridad) {
+void Driver::CrearPakete(const Computadora& origen, const Computadora& destino, Nat prioridad) {
     Conjunto<Pc> aux = d.verRed().mostrarComputadoras();
     Conjunto<Pc>::const_Iterador it = aux.CrearIt();
     while( origen != it.Siguiente().IP() ){
@@ -189,9 +195,9 @@ void Driver::CrearPaquete(const Computadora& origen, const Computadora& destino,
         it2.Avanzar();
     }
     Pc pc2 = it2.Siguiente();
-    Paquete p(id_paquetes, prioridad, pc1, pc2);
-    d.anadirPaquete(p);
-    id_paquetes++;
+    Pakete p(id_Paketes, prioridad, pc1, pc2);
+    d.anadirPakete(p);
+    id_Paketes++;
     c.AgregarRapido(p);
 }
 		
@@ -204,30 +210,30 @@ const Computadora& Driver::laQueMasEnvio() {
     return res;
 }
 
-const Computadora& Driver::origen(const Pakete& p) const {
-    Conjunto<Paquete>::const_Iterador it = c.CrearIt();
+const Computadora& Driver::origen(const Paquete& p) const {
+    Conjunto<Pakete>::const_Iterador it = c.CrearIt();
     while( p != it.Siguiente().ID() ){
         it.Avanzar();
     }
-    Paquete aux = it.Siguiente();
+    Pakete aux = it.Siguiente();
     return aux.origen().IP();
 } 
 
-const Computadora& Driver::destino(const Pakete& p) const { 
-    Conjunto<Paquete>::const_Iterador it = c.CrearIt();
+const Computadora& Driver::destino(const Paquete& p) const { 
+    Conjunto<Pakete>::const_Iterador it = c.CrearIt();
     while( p != it.Siguiente().ID() ){
         it.Avanzar();
     }
-    Paquete aux = it.Siguiente();
+    Pakete aux = it.Siguiente();
     return aux.destino().IP();	
 }
 
-Nat Driver::prioridad(const Pakete& p) const { 
-    Conjunto<Paquete>::const_Iterador it = c.CrearIt();
+Nat Driver::prioridad(const Paquete& p) const { 
+    Conjunto<Pakete>::const_Iterador it = c.CrearIt();
     while( p != it.Siguiente().ID() ){
         it.Avanzar();
     }
-    Paquete aux = it.Siguiente();
+    Pakete aux = it.Siguiente();
     return aux.prioridad();
 }
 		

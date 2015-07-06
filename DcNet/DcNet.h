@@ -17,13 +17,13 @@ class DcNet
     public:
         DcNet();
         DcNet(const Red&);  
-        void anadirPaquete(const Paquete&);
+        void anadirPaquete(const Pakete&);
         void avanzarSegundo();
         const Red verRed() const;
-        Lista<Pc> recorrido(const Paquete&);
+        Lista<Pc> recorrido(const Pakete&);
         int enviados(const Pc&);
-        Avl<Paquete> paquetes(const Pc&);
-        bool enTransito(const Paquete&);
+        Avl<Pakete> paquetes(const Pc&);
+        bool enTransito(const Pakete&);
         Pc masEnviados() const;
         DcNet& operator=( DcNet& otro);
 
@@ -31,9 +31,9 @@ class DcNet
         struct Tupla {           
 
 
-            Tupla(const Paquete& p, const Lista<Pc>& l, const Pc& cp) : compu(cp), paq(p), list(l){}
+            Tupla(const Pakete& p, const Lista<Pc>& l, const Pc& cp) : compu(cp), paq(p), list(l){}
 
-            const Paquete Prim() const{
+            const Pakete Prim() const{
                 return paq;
             }
 
@@ -45,7 +45,7 @@ class DcNet
                 return compu;
             }
             
-            Paquete paq;
+            Pakete paq;
             Lista<Pc> list;
             Pc compu;
         };

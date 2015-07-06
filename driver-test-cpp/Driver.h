@@ -4,6 +4,7 @@
 #include "Tipos.h"
 #include "../Conjunto/TiposBasicos.h"
 #include "../DcNet/DcNet.cpp"
+#include "aed2/Conj.h"
 
 
 namespace aed2 {
@@ -24,26 +25,26 @@ class Driver
         Nat CantidadInterfacesDe(const Computadora& c) const;
         const Interfaz& IesimaInterfazDe(const Computadora& c, const Nat i) const ;
 
-        const Interfaz& InterfazUsada(const Computadora& c1, const Computadora& c2) const;
+        const Interfaz& IntefazUsada(const Computadora& c1, const Computadora& c2) const;
 
         bool conectadas(const Computadora& c1, const Computadora& c2) const;
 
         /// Armado Red ////////////////////////////////////////////////////////////////
 
-        void AgregarComputadora(const Computadora& ip, const Conjunto<Interfaz>& ci);
+        void AgregarComputadora(const Computadora& ip, const Conj<Interfaz>& ci);
         
         void Conectar(const Computadora& c1, const Interfaz& i1, const Computadora& c2, const Interfaz& i2);
     
 
        /// Observadores DCNet //////////////////////////////////////////////////////////////
     
-        Nat CantidadNodosRecorridosPor(const Pakete& p) ;
-        const Computadora& IesimoNodoRecorridoPor(const Pakete& p, const Nat i);
+        Nat CantidadNodosRecorridosPor(const Paquete& p) ;
+        const Computadora& IesimoNodoRecorridoPor(const Paquete& p, const Nat i);
 
         Nat CantidadEnviadosPor(const Computadora& c) ;
     
         Nat CantidadEnEsperaEn(const Computadora& c) ;
-        const Pakete& IesimoEnEsperaEn(const Computadora& c1, const Nat i) ;
+        const Paquete& IesimoEnEsperaEn(const Computadora& c1, const Nat i) ;
 
         /// Acciones DCNet ////////////////////////////////////////////////////////////
 
@@ -53,16 +54,17 @@ class Driver
         
         const Computadora& laQueMasEnvio() ;
         
-        // Auxiliares para ver los Paketes
-        const Computadora& origen(const Pakete& p) const; 
-        const Computadora& destino(const Pakete& p) const; 
-        Nat prioridad(const Pakete& p) const; 
+        // Auxiliares para ver los Paquetes
+        const Computadora& origen(const Paquete& p) const; 
+        const Computadora& destino(const Paquete& p) const; 
+        Nat prioridad(const Paquete& p) const; 
         
     private:
 
     	DcNet d;
     	Nat id_paquetes;
-        Conjunto<Paquete> c;
+        Conjunto<Pakete> c;
+
 
     /*********************************************************************
      * TODO: Va a ser necesario instanciar privadamente un Modulo DCNet *

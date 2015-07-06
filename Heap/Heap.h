@@ -9,9 +9,9 @@ class ColaPriorHeap{
 
     public:
         ColaPriorHeap();
-        void Encolar(const Paquete& a);
+        void Encolar(const Pakete& a);
         bool EsVacia();
-        Paquete Desencolar();
+        Pakete Desencolar();
         int Cantidad();
         //ColaPriorHeap<T>& operator=(const ColaPriorHeap<T>& otro);
 
@@ -21,7 +21,7 @@ class ColaPriorHeap{
 // Estructura del nodo, tiene un valor de tipo T, su altura, un puntero para cada uno de sus dos hijos y uno para su padre
 
         struct Nodo{
-            Paquete dato;
+            Pakete dato;
             Nodo* izq;
             Nodo* der;
             Nodo* padre;
@@ -30,7 +30,7 @@ class ColaPriorHeap{
 
 // Funcion para ver si un elemento tiene mas prioridad que otro
 
-        bool mayorPrioridad(Paquete& dato1, Paquete& dato2){
+        bool mayorPrioridad(Pakete& dato1, Pakete& dato2){
             return (dato1.prioridad() < dato2.prioridad());
         }
 
@@ -38,7 +38,7 @@ class ColaPriorHeap{
 
         void swapear(Nodo* papa, Nodo* n){
 
-        Paquete aux = papa->dato;
+        Pakete aux = papa->dato;
         papa->dato = n->dato;
         n->dato = aux;
    		}
@@ -145,7 +145,7 @@ ColaPriorHeap::ColaPriorHeap(){
 //________________________________________________________________
 
 
-void ColaPriorHeap::Encolar(const Paquete& a){
+void ColaPriorHeap::Encolar(const Pakete& a){
 
 // Creo el nodo con los datos 
 
@@ -227,10 +227,10 @@ return cant;
 //________________________________________________________________
 
 
-Paquete ColaPriorHeap::Desencolar(){
+Pakete ColaPriorHeap::Desencolar(){
     assert(cant != 0);
     cant--;
-	Paquete a = raiz->dato;
+	Pakete a = raiz->dato;
 	Nodo* ultimo;
 
 // Me fijo si padreult es nulo o no, basicamente si el heap tiene 3 elementos (no hay padreult) o si tiene mas

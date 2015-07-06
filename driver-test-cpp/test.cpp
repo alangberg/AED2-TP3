@@ -1,8 +1,8 @@
 #include "Driver.cpp"
 #include "mini_test.h"
-#include "../Conjunto/Lista.h"
-#include "../Conjunto/Conjunto.h"
-#include "../Conjunto/Dicc.h"
+#include "aed2/Lista.h"
+#include "aed2/Conj.h"
+#include "aed2/Dicc.h"
 
 #include <string>
 #include <iostream>

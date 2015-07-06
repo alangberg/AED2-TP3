@@ -16,28 +16,28 @@ using namespace aed2;
 class Definicion{ // perdida de memoria?
 	public:
 		Definicion();
-		Definicion(Avl<Paquete>& avl, ColaPriorHeap& heap, DiccAvl< Paquete, Lista<Pc> >& dicc);
+		Definicion(Avl<Pakete>& avl, ColaPriorHeap& heap, DiccAvl< Pakete, Lista<Pc> >& dicc);
 		int* pEnviados() const;
-		Avl<Paquete>* xID() const;
+		Avl<Pakete>* xID() const;
 		ColaPriorHeap* xPrior() const;
-		DiccAvl< Paquete, Lista<Pc> >* caminos() const;
+		DiccAvl< Pakete, Lista<Pc> >* caminos() const;
 		void sumarUnoEnviados();
 
 	private:
-		Avl<Paquete>* xid;
+		Avl<Pakete>* xid;
 		ColaPriorHeap* xprior;
-		DiccAvl<  Paquete, Lista<Pc> >* p_caminos;
+		DiccAvl<  Pakete, Lista<Pc> >* p_caminos;
 		int* enviados;
 };
 
 Definicion::Definicion(){
-	xid = new Avl<Paquete>;
+	xid = new Avl<Pakete>;
 	xprior =  new ColaPriorHeap;
-	p_caminos = new DiccAvl<  Paquete, Lista<Pc> >;
+	p_caminos = new DiccAvl<  Pakete, Lista<Pc> >;
 	enviados = new int(0);
 }
 /*
-Definicion::Definicion(Avl<Paquete>& avl, ColaPriorHeap<Paquete>& heap, DiccAvl< Paquete, Lista<Pc> >& dicc) 
+Definicion::Definicion(Avl<Pakete>& avl, ColaPriorHeap<Pakete>& heap, DiccAvl< Pakete, Lista<Pc> >& dicc) 
 : xid(&avl), xprior(&heap), p_caminos(&dicc), enviados(0){	
 }
 */
@@ -48,7 +48,7 @@ int* Definicion::pEnviados() const{
 	return enviados;
 }
 
-Avl<Paquete>* Definicion::xID() const{
+Avl<Pakete>* Definicion::xID() const{
 	return xid;
 }
 
@@ -56,7 +56,7 @@ ColaPriorHeap*  Definicion::xPrior() const{
 	return xprior;
 }
 
-DiccAvl< Paquete, Lista<Pc> >* Definicion::caminos() const{
+DiccAvl< Pakete, Lista<Pc> >* Definicion::caminos() const{
 	return p_caminos;
 }
 

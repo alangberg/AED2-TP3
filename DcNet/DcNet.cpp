@@ -38,7 +38,7 @@ DcNet::DcNet(const Red& r){
 }
 
 
-void DcNet::anadirPaquete(const Paquete& p){
+void DcNet::anadirPaquete(const Pakete& p){
 	assert(red.mostrarComputadoras().Pertenece(p.origen()) && red.mostrarComputadoras().Pertenece(p.destino()) && red.existeCamino(p.origen(), p.destino()) && not enTransito(p));
 	Definicion actual = *pc_paquetes.obtener(p.origen().IP());
 	actual.xID()->insertar(p);
@@ -57,7 +57,7 @@ int DcNet::enviados(const Pc& p) {
 	return *pc_paquetes.obtener(p.IP())->pEnviados();
 }
 
-Avl<Paquete> DcNet::paquetes(const Pc& p){
+Avl<Pakete> DcNet::paquetes(const Pc& p){
 	assert(red.mostrarComputadoras().Pertenece(p));
 	return *pc_paquetes.obtener(p.IP())->xID();
 }
@@ -67,7 +67,7 @@ Pc DcNet::masEnviados() const{
 }
 
 
-bool DcNet::enTransito(const Paquete& p){
+bool DcNet::enTransito(const Pakete& p){
 	Conjunto<Pc> aux = red.mostrarComputadoras();
 	Conjunto<Pc>::const_Iterador it = aux.CrearIt();
 	bool noEncontrado = true;
@@ -80,7 +80,7 @@ bool DcNet::enTransito(const Paquete& p){
 }
 
 
-Lista<Pc> DcNet::recorrido(const Paquete& p){
+Lista<Pc> DcNet::recorrido(const Pakete& p){
 	assert(enTransito(p));	
 	DiccString<Definicion>::Iterador it(&pc_paquetes);
 	//Dicc<Pc,Definicion>::const_Iterador it = pc_paquetes.CrearIt();
@@ -102,11 +102,11 @@ Lista<Pc> DcNet::recorrido(const Paquete& p){
 void DcNet::avanzarSegundo(){
 	Conjunto<Pc> auxiliar = red.mostrarComputadoras();
 	Conjunto<Pc>::const_Iterador it = auxiliar.CrearIt();
-	Lista<Tupla> aEnviar; //Lista< tuple<Paquete, Lista<Pc>, Pc> > aEnviar;
+	Lista<Tupla> aEnviar; //Lista< tuple<Pakete, Lista<Pc>, Pc> > aEnviar;
 	while (it.HaySiguiente()){
 		Definicion actual = *pc_paquetes.obtener(it.Siguiente().IP());
 		if (actual.xID()->cardinal() != 0){
-			Paquete p = actual.xPrior()->Desencolar();
+			Pakete p = actual.xPrior()->Desencolar();
 			Lista<Pc> l = actual.caminos()->significado(p);
 			actual.xID()->borrar(p);
 			actual.caminos()->borrar(p);
