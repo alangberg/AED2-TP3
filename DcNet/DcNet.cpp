@@ -104,12 +104,12 @@ void DcNet::avanzarSegundo(){
 	Conjunto<Pc>::const_Iterador it = auxiliar.CrearIt();
 	Lista<Tupla> aEnviar; //Lista< tuple<Pakete, Lista<Pc>, Pc> > aEnviar;
 	while (it.HaySiguiente()){
-		Definicion actual = *pc_paquetes.obtener(it.Siguiente().IP());
-		if (actual.xID()->cardinal() != 0){
-			Pakete p = actual.xPrior()->Desencolar();
-			Lista<Pc> l = actual.caminos()->significado(p);
-			actual.xID()->borrar(p);
-			actual.caminos()->borrar(p);
+		Definicion* actual = pc_paquetes.obtener(it.Siguiente().IP());
+		if (actual->xID()->cardinal() != 0){
+			Pakete p = actual->xPrior()->Desencolar();
+			Lista<Pc> l = actual->caminos()->significado(p);
+			actual->xID()->borrar(p);
+			actual->caminos()->borrar(p);
 			DiccString<Pc> aux = *siguientes.obtener(it.Siguiente().IP());
 			Pc pct = *aux.obtener(p.destino().IP());
 			if (pct != p.destino()){
@@ -117,8 +117,8 @@ void DcNet::avanzarSegundo(){
 				Tupla tp(p,l,pct);
 				aEnviar.AgregarAtras(tp);
 			}
-			actual.sumarUnoEnviados();
-			int cant = *actual.pEnviados();			
+			actual->sumarUnoEnviados();
+			int cant = *actual->pEnviados();			
 			if (cant_MasEnviados < cant){
 				cant_MasEnviados = cant;
 				pc_masEnviados = it.Siguiente();
@@ -128,10 +128,10 @@ void DcNet::avanzarSegundo(){
 	}
 	Lista<Tupla>::const_Iterador itP = aEnviar.CrearIt();
 	while (itP.HaySiguiente()){
-		Definicion actual2 = *pc_paquetes.obtener(itP.Siguiente().Ter().IP());
-		actual2.xID()->insertar(itP.Siguiente().Prim());
-		actual2.xPrior()->Encolar(itP.Siguiente().Prim());
-		actual2.caminos()->definir(itP.Siguiente().Prim(), itP.Siguiente().Seg());
+		Definicion* actual2 = pc_paquetes.obtener(itP.Siguiente().Ter().IP());
+		actual2->xID()->insertar(itP.Siguiente().Prim());
+		actual2->xPrior()->Encolar(itP.Siguiente().Prim());
+		actual2->caminos()->definir(itP.Siguiente().Prim(), itP.Siguiente().Seg());
 		itP.Avanzar();
 	}
 }

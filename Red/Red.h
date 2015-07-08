@@ -127,7 +127,9 @@ const Conjunto<Pc> Red::mostrarComputadoras() const
 
 void Red::agregarCompu(const Pc& p)
 {
-	assert(not mostrarComputadoras().Pertenece(p));	
+	if (mostrarComputadoras().Pertenece(p)){
+		return;
+	}	
 	interfaces.DefinirRapido(p.IP(), p.Interfaces());
 	Conjunto<Ip> c;
 	vecinos.DefinirRapido(p.IP(), c);
@@ -173,7 +175,12 @@ Interfaz Red::interfazQueUsan(const Pc& p1, const Pc& p2) const{
 	Lista<Conexion>::const_Iterador it = conexiones.CrearIt();
 	Ip ip1 = p1.IP();
 	Ip ip2 = p2.IP();
-	while (it.HaySiguiente() && it.Siguiente().Prim() != ip1 && it.Siguiente().Ter() != ip1){
+	while (it.HaySiguiente()){
+		if (it.Siguiente().Prim() == ip1 || it.Siguiente().Ter() == ip1){
+			if (it.Siguiente().Prim() == ip2 || it.Siguiente().Ter() == ip2){
+				break;
+			}
+		}		
 		it.Avanzar();
 	}
 	Interfaz res; 

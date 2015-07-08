@@ -82,29 +82,29 @@ int main() {
 
 	Nat x = 1;
 	Nat y = 22;
-	Paquete q = Paquete(x,y,a,c);
+	Pakete q = Pakete(x,y,a,c);
 
 	x = 5;
 	y = 22;
-	Paquete qq = Paquete(x,y,c,d);
+	Pakete qq = Pakete(x,y,c,d);
 
 	x = 2;
 	y = 21;
-	Paquete qw = Paquete(x,y,e,f);
+	Pakete qw = Pakete(x,y,e,f);
 
 	x = 3;
 	y = 22;
-	Paquete qe = Paquete(x,y,a,f);
+	Pakete qe = Pakete(x,y,a,f);
 
 	x = 10;
 	y = 1;
-	Paquete qr = Paquete(x,y,d,a);
+	Pakete qr = Pakete(x,y,d,a);
 
 
-	decenet.anadirPaquete(q);
-	decenet.anadirPaquete(qq);
+	//decenet.anadirPaquete(q);
+	//decenet.anadirPaquete(qq);
 	decenet.anadirPaquete(qw);
-
+/*
 	cout << "en transito:" << endl;	
 	bool b1 = decenet.enTransito(q);
 	bool b2 = decenet.enTransito(qq);
@@ -194,7 +194,20 @@ int main() {
 
 	decenet.anadirPaquete(qe);
 	decenet.anadirPaquete(qr);
+*/
 
+	cout << "recorrido:" << endl;
+	cout << decenet.recorrido(qw) << endl;
+
+	decenet.avanzarSegundo();
+	
+	cout << "recorrido:" << endl;
+	cout << decenet.recorrido(qw) << endl;
+
+	decenet.avanzarSegundo();
+	
+	cout << "recorrido:" << endl;
+	cout << decenet.recorrido(qw) << endl;
 
 	return 0;
 }

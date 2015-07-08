@@ -1,19 +1,15 @@
-/**
- * Modulo Diccionario Lineal
- * Algoritmos y Estructuras de Datos 2
+/*
+ * Diccionario implementado sobre dos listas enlazadas (Lista.h),
+ * una de claves_ y una de significados_.
+ * 
+ * Created on 30 de octubre de 2010
  */
 
-#ifndef AED2_DICC_H_INCLUDED
-#define	AED2_DICC_H_INCLUDED
-
-#include "Lista.h"
+#ifndef AED2_DICC_H_
+#define	AED2_DICC_H_
 
 #include <ostream>
-
-/* Descomentar este flag para habilitar los chequeos internos de PRE
- * OJO que invalida las complejidades exportadas de algunas funciones
- */
-#define DEBUG 1
+#include "Lista.h"
 
 namespace aed2
 {
@@ -21,172 +17,160 @@ namespace aed2
 template<class K,class S>
 class Dicc
 {
-	public:
+  public:
 
-		// Forward declarations. Las definiciones estan mas abajo.
-		class Iterador;
-		class const_Iterador;
+    //para iterar las tuplas vamos a usar los siguientes tipos
+    struct Elem;
+    struct const_Elem;
 
-		Dicc();
+    class Iterador;
+    class const_Iterador;
 
-		Dicc(const Dicc<K,S>& otro);
+    Dicc();
+    Dicc(const Dicc<K,S>& otro);
+    Dicc<K,S>& operator=(const Dicc<K,S>& otro);
 
-		Dicc<K,S>& operator = (const Dicc<K,S>& otro);
+    Iterador Definir(const K& clave, const S& significado);
+    Iterador DefinirRapido(const K& clave, const S& significado);
 
-		Iterador Definir(const K& clave, const S& significado);
-		Iterador DefinirRapido(const K& clave, const S& significado);
+    bool Definido(const K& clave) const;
+    const S& Significado(const K& clave) const;
+    S& Significado(const K& clave);
+    void Borrar(const K& clave);
+    Nat CantClaves() const;
+    Iterador CrearIt();
+    const_Iterador CrearIt() const;
 
-		bool Definido(const K& clave) const;
+    //Estas funciones son utiles para saber si algo esta definido
+    //y ver cual es su signficado, sin recorrer dos veces.
+    Iterador Buscar(const K&);
+    const_Iterador Buscar(const K&) const;
 
-		const S& Significado(const K& clave) const;
-		S& Significado(const K& clave);
+    class Iterador
+    {
+      public:
 
-		void Borrar(const K& clave);
+        Iterador();
 
-		Nat CantClaves() const;
+        Iterador(const typename Dicc<K, S>::Iterador& otro);
 
-		Iterador CrearIt();
-		const_Iterador CrearIt() const;
+        Iterador& operator = (const typename Dicc<K, S>::Iterador& otro);
 
-		/** 
-		 * Estas funciones son utiles para saber si algo esta definido
-		 * y ver cual es su signficado, sin recorrer dos veces.
-		 * Si la clave no esta definida, Iterador.HaySiguiente() 
-		 * retorna falso. Si la clave esta definida, Iterador.Siguiente()
-		 * retorna el elemento buscado.
-		 */
-		Iterador Buscar(const K&);
-		const_Iterador Buscar(const K&) const;
+        bool operator == (const typename Dicc<K,S>::Iterador&) const;
 
-		struct Elem
-		{
-			Elem(const K& c, S& s)
-				: clave(c), significado(s)
-			{}
+        bool HaySiguiente() const;
+        bool HayAnterior() const;
+        const K& SiguienteClave() const;
+        S& SiguienteSignificado();
+        const K& AnteriorClave() const;
+        S& AnteriorSignificado();
+        Elem Siguiente();
+        Elem Anterior();
+        void Avanzar();
+        void Retroceder();
+        void EliminarSiguiente();
+        void EliminarAnterior();
 
-			const K& clave;
-			S& significado;
-		};
+      private:
 
-		struct const_Elem
-		{
-			const_Elem(const K& c, const S& s)
-				: clave(c), significado(s)
-			{}
+        typename Lista<K>::Iterador it_claves_;
+        typename Lista<S>::Iterador it_significados_;
 
-			const K& clave;
-			const S& significado;
+        Iterador(Dicc<K,S>* d);
 
-			// Para sacar esto de aca, necesitariamos definir rasgos y otras
-			// yerbas. Lamentablemente, sino C++ no reconoce bien los tipos.
-			friend std::ostream& operator << (std::ostream& os, const const_Elem& e)
-			{
-				os << e.clave << ":" << e.significado;
-				return os;
-			}
-		};
+        friend typename Dicc<K,S>::Iterador Dicc<K,S>::CrearIt();
+        friend class Dicc<K, S>::const_Iterador;
+    };
 
-		class Iterador
-		{
-			public:
+    class const_Iterador
+    {
+      public:
 
-				Iterador();
+        const_Iterador();
 
-				Iterador(const typename Dicc<K, S>::Iterador& otro);
+        const_Iterador(const typename Dicc<K,S>::Iterador& otro);
 
-				Iterador& operator=(const typename Dicc<K, S>::Iterador& otro);
+        const_Iterador(const typename Dicc<K, S>::const_Iterador& otro);
 
-				bool operator==(const typename Dicc<K,S>::Iterador&) const;
+        const_Iterador& operator = (const typename Dicc<K, S>::const_Iterador& otro);
 
-				bool HaySiguiente() const;
-				bool HayAnterior() const;
+        bool operator==(const typename Dicc<K,S>::const_Iterador&) const;
 
-				Elem Siguiente() const;
-				Elem Anterior() const;
+        bool HaySiguiente() const;
+        bool HayAnterior() const;
+        const K& SiguienteClave() const;
+        const S& SiguienteSignificado() const;
+        const K& AnteriorClave() const;
+        const S& AnteriorSignificado() const;
+        const_Elem Siguiente() const;
+        const_Elem Anterior() const;
+        void Avanzar();
+        void Retroceder();
 
-				
-				K& SiguienteClave() const;
-				S& SiguienteSignificado() const;
-				
-				const K& AnteriorClave() const;
-				const S& AnteriorSignificado() const;
-				
+    private:
 
-				void Avanzar();
-				void Retroceder();
+        typename Lista<K>::const_Iterador it_claves_;
+        typename Lista<S>::const_Iterador it_significados_;
 
-				void EliminarSiguiente();
-				void EliminarAnterior();
+        const_Iterador(const Dicc<K,S>* d);
 
-			private:
+        friend typename Dicc<K,S>::const_Iterador Dicc<K,S>::CrearIt() const;
+    };
 
-				Iterador(Dicc<K,S>* d);
+    struct Elem
+    {
+      public:
 
-				friend typename Dicc<K,S>::Iterador Dicc<K,S>::CrearIt();
+        const K& clave;
+        S& significado;
 
-				typename Lista<K>::Iterador itC;
-				typename Lista<S>::Iterador itS;
+        Elem(const K& c, S& s) : clave(c), significado(s) {}
+        //Para sacar esto de aca, necesitariamos definir rasgos y otras yerbas
+        //Lamentablemente, sino C++ no reconoce bien los tipos
 
-				friend class Dicc<K, S>::const_Iterador;
-		}; // class Iterador
+        friend std::ostream& operator<<(std::ostream& os, const Dicc<K,S>::Elem& e) {
+          return os << e.clave << ":" << e.significado;
+        }
 
-		class const_Iterador
-		{
-			public:
+      private:
 
-				const_Iterador();
+        typename Dicc<K,S>::Elem& operator=(const Dicc<K,S>::Elem&);
+    };
 
-				const_Iterador(const typename Dicc<K,S>::Iterador& otro);
+    struct const_Elem
+    {
+      public:
 
-				const_Iterador(const typename Dicc<K, S>::const_Iterador& otro);
+        const K& clave;
+        const S& significado;
 
-				const_Iterador& operator=(const typename Dicc<K, S>::const_Iterador& otro);
+        const_Elem(const K& c, const S& s) : clave(c), significado(s) {}
 
-				bool operator==(const typename Dicc<K,S>::const_Iterador&) const;
+        //Para sacar esto de aca, necesitariamos definir rasgos y otras yerbas
+        //Lamentablemente, sino C++ no reconoce bien los tipos
+        friend std::ostream& operator << (std::ostream& os, const Dicc<K,S>::const_Elem& e) {
+          return os << e.clave << ":" << e.significado;
+        }
 
-				bool HaySiguiente() const;
-				bool HayAnterior() const;
-				
-				const K& SiguienteClave() const;
-				const S& SiguienteSignificado() const;
-				
-				const K& AnteriorClave() const;
-				const S& AnteriorSignificado() const;
-				
-				const_Elem Siguiente() const;
-				const_Elem Anterior() const;
-				void Avanzar();
-				void Retroceder();
-			private:
-				const_Iterador(const Dicc<K,S>* d);
-				friend typename Dicc<K,S>::const_Iterador Dicc<K,S>::CrearIt() const;
-				typename Lista<K>::const_Iterador itC;
-				typename Lista<S>::const_Iterador itS;
-		}; // class const_Iterador
+      private:
 
-	private:
+        typename Dicc<K,S>::const_Elem& operator = (const Dicc<K,S>::const_Elem&);
+    };
 
-		Lista<K> claves_;
+  private:
 
-		Lista<S> significados_;
+    Lista<K> claves_;
+    Lista<S> significados_;
 
-}; // class Dicc
+};
 
-/**
- * Operador ostream de Dicc
- */
 template<class K, class S>
-std::ostream& operator << (std::ostream& os, const Dicc<K,S>& d);
+std::ostream& operator << (std::ostream &os, const Dicc<K,S>& d);
 
-/**
- * Operador comparacion
- */
 template<class K, class S>
 bool operator == (const Dicc<K,S>& d1, const Dicc<K,S>& d2);
 
-	// ---------------------------------------------------------
-	//  class Dicc
-	// ---------------------------------------------------------
+  // Implementacion Dicc
 
 template<class K, class S>
 Dicc<K,S>::Dicc()
@@ -194,109 +178,100 @@ Dicc<K,S>::Dicc()
 
 template<class K, class S>
 Dicc<K,S>::Dicc(const Dicc<K,S>& otro)
-	: claves_(otro.claves_), significados_(otro.significados_)
+  : claves_(otro.claves_), significados_(otro.significados_)
 {}
 
 template<class K, class S>
-Dicc<K,S>& Dicc<K,S>::operator=(const Dicc<K,S>& otro)
+Dicc<K,S>& Dicc<K,S>::operator = (const Dicc<K,S>& otro)
 {
-	claves_ = otro.claves_;
-	significados_ = otro.significados_;
+  claves_ = otro.claves_;
+  significados_ = otro.significados_;
 
-	return *this;
+  return *this;
 }
 
 template<class K, class S>
 typename Dicc<K,S>::Iterador Dicc<K,S>::Definir(const K& clave, const S& significado)
 {
-	Iterador it = Buscar(clave);
+  Iterador it = Buscar(clave);
 
-	// Si la clave existe, cambio el significado
-	if(it.HaySiguiente()) {
-		it.Siguiente().significado = significado;
-	// Si la clave no existe, agrego la definicion
-	} else {
-		it = DefinirRapido(clave, significado);
-	}
+  if(it.HaySiguiente()) {
+    it.SiguienteSignificado() = significado;
+  } else {
+    it = DefinirRapido(clave, significado);
+  }
 
-	return it;
+  return it;
 }
 
 template<class K, class S>
 typename Dicc<K,S>::Iterador Dicc<K,S>::DefinirRapido(const K& clave, const S& significado)
 {
-	// Me aseguro que se cumpla la precondicion
-	// OJO que esto invalida la complejidad
-	#ifdef DEBUG
-	assert( !Definido(clave) );
-	#endif
+  #ifdef DEBUG
+  assert( not Definido(clave) );
+  #endif
 
-	claves_.AgregarAdelante(clave);
-	significados_.AgregarAdelante(significado);
+  claves_.AgregarAdelante(clave);
+  significados_.AgregarAdelante(significado);
 
-	return CrearIt();
+  return CrearIt();
 }
 
 template<class K, class S>
 bool Dicc<K,S>::Definido(const K& clave) const
 {
-	return Buscar(clave).HaySiguiente();
+  return Buscar(clave).HaySiguiente();
 }
 
 template<class K, class S>
 const S& Dicc<K,S>::Significado(const K& clave)const
 {
-	// Me aseguro que se cumpla la precondicion
-	#ifdef DEBUG
-	assert( Definido(clave) );
-	#endif
+  #ifdef DEBUG
+  assert( Definido(clave) );
+  #endif
 
-	return Buscar(clave).Siguiente().significado;
+  return Buscar(clave).SiguienteSignificado();
 }
 
 template<class K, class S>
 S& Dicc<K,S>::Significado(const K& clave)
 {
-	// Me aseguro que se cumpla la precondicion
-	#ifdef DEBUG
-	assert( Definido(clave) );
-	#endif
+  #ifdef DEBUG
+  assert( Definido(clave) );
+  #endif
 
-	return Buscar(clave).Siguiente().significado;
+  return Buscar(clave).SiguienteSignificado();
 }
 
 template<class K, class S>
 void Dicc<K,S>::Borrar(const K& clave)
 {
-	// Me aseguro que se cumpla la precondicion
-	#ifdef DEBUG
-	assert( Definido(clave) );
-	#endif
+  #ifdef DEBUG
+  assert( Definido(clave) );
+  #endif
 
-	Buscar(clave).EliminarSiguiente();
+  Buscar(clave).EliminarSiguiente();
 }
 
 template<class K, class S>
 Nat Dicc<K,S>::CantClaves() const
 {
-	return claves_.Longitud();
+  return claves_.Longitud();
 }
 
 template<class K, class S>
 typename Dicc<K,S>::Iterador Dicc<K,S>::CrearIt()
 {
-	return Iterador(this);
+  return Iterador(this);
 }
 
 template<class K, class S>
 typename Dicc<K,S>::const_Iterador Dicc<K,S>::CrearIt() const
 {
-	return const_Iterador(this);
+  return const_Iterador(this);
 }
 
-	// ---------------------------------------------------------
-	//  class Dicc::Iterador
-	// ---------------------------------------------------------
+  // Implementacion Iterador
 
 template<class K, class S>
 Dicc<K,S>::Iterador::Iterador()
@@ -304,156 +279,140 @@ Dicc<K,S>::Iterador::Iterador()
 
 template<class K, class S>
 Dicc<K,S>::Iterador::Iterador(const typename Dicc<K, S>::Iterador& otro)
-	: itC( otro.itC ), itS( otro.itS )
+  : it_claves_(otro.it_claves_), it_significados_(otro.it_significados_)
 {}
 
 template<class K, class S>
 typename Dicc<K,S>::Iterador& Dicc<K,S>::Iterador::operator = (const typename Dicc<K, S>::Iterador& otro)
 {
-	itC = otro.itC;
-	itS = otro.itS;
+  it_claves_ = otro.it_claves_;
+  it_significados_ = otro.it_significados_;
 
-	return *this;
+  return *this;
 }
 
 template<class K, class S>
 bool Dicc<K,S>::Iterador::HaySiguiente() const
 {
-	return itC.HaySiguiente();
+  return it_claves_.HaySiguiente();
 }
 
 template<class K, class S>
 bool Dicc<K,S>::Iterador::HayAnterior() const
 {
-	return itC.HayAnterior();
-}
-
-
-template<class K, class S>
-K& Dicc<K,S>::Iterador::SiguienteClave() const
-{
-	// Me aseguro que se cumpla la precondicion
-	#ifdef DEBUG
-	assert(HaySiguiente());
-	#endif
-
-	return itC.Siguiente();
+  return it_claves_.HayAnterior();
 }
 
 template<class K, class S>
-S& Dicc<K,S>::Iterador::SiguienteSignificado() const
+const K& Dicc<K,S>::Iterador::SiguienteClave() const
 {
-	// Me aseguro que se cumpla la precondicion
-	#ifdef DEBUG
-	assert(HaySiguiente());
-	#endif
+  #ifdef DEBUG
+  assert(HaySiguiente());
+  #endif
 
-	return itS.Siguiente();
+  return it_claves_.Siguiente();
 }
-
 
 template<class K, class S>
-typename Dicc<K,S>::Elem Dicc<K,S>::Iterador::Siguiente() const
+S& Dicc<K,S>::Iterador::SiguienteSignificado()
 {
-	// Me aseguro que se cumpla la precondicion
-	#ifdef DEBUG
-	assert(HaySiguiente());
-	#endif
+  #ifdef DEBUG
+  assert( HaySiguiente() );
+  #endif
 
-	return Elem(itC.Siguiente(), itS.Siguiente());
+  return it_significados_.Siguiente();
 }
 
+template<class K, class S>
+typename Dicc<K,S>::Elem Dicc<K,S>::Iterador::Siguiente()
+{
+  #ifdef DEBUG
+  assert( HaySiguiente() );
+  #endif
+
+  return Elem(SiguienteClave(), SiguienteSignificado());
+}
 
 template<class K, class S>
 const K& Dicc<K,S>::Iterador::AnteriorClave() const
 {
-	// Me aseguro que se cumpla la precondicion
-	#ifdef DEBUG
-	assert(HayAnterior());
-	#endif
+  #ifdef DEBUG
+  assert( HayAnterior() );
+  #endif
 
-	return itC.Anterior();
+  return it_claves_.Anterior();
 }
 
 template<class K, class S>
-const S& Dicc<K,S>::Iterador::AnteriorSignificado() const
+S& Dicc<K,S>::Iterador::AnteriorSignificado()
 {
-	// Me aseguro que se cumpla la precondicion
-	#ifdef DEBUG
-	assert(HayAnterior());
-	#endif
-	
-	return itS.Anterior();
+  #ifdef DEBUG
+  assert(HayAnterior());
+  #endif
+
+  return it_significados_.Anterior();
 }
 
-
 template<class K, class S>
-typename Dicc<K,S>::Elem Dicc<K,S>::Iterador::Anterior() const
+typename Dicc<K,S>::Elem Dicc<K,S>::Iterador::Anterior()
 {
-	// Me aseguro que se cumpla la precondicion
-	#ifdef DEBUG
-	assert(HayAnterior());
-	#endif
+  #ifdef DEBUG
+  assert(HayAnterior());
+  #endif
 
-	return Elem(itC.Anterior(), itS.Anterior());
+  return Elem(AnteriorClave(), AnteriorSignificado());
 }
 
 template<class K, class S>
 void Dicc<K,S>::Iterador::Avanzar()
 {
-	// Me aseguro que se cumpla la precondicion
-	#ifdef DEBUG
-	assert(HaySiguiente());
-	#endif
+  #ifdef DEBUG
+  assert(HaySiguiente());
+  #endif
 
-	itC.Avanzar();
-	itS.Avanzar();
+  it_claves_.Avanzar();
+  it_significados_.Avanzar();
 }
 
 template<class K, class S>
 void Dicc<K,S>::Iterador::Retroceder()
 {
-	// Me aseguro que se cumpla la precondicion
-	#ifdef DEBUG
-	assert(HayAnterior());
-	#endif
+  #ifdef DEBUG
+  assert(HayAnterior());
+  #endif
 
-	itC.Retroceder();
-	itS.Retroceder();
+  it_claves_.Retroceder();
+  it_significados_.Retroceder();
 }
 
 template<class K, class S>
 Dicc<K,S>::Iterador::Iterador(Dicc<K,S>* d)
-	: itC( d->claves_.CrearIt() ), itS( d->significados_.CrearIt() )
+  : it_claves_(d->claves_.CrearIt()), it_significados_(d->significados_.CrearIt())
 {}
 
 template<class K, class S>
 void Dicc<K,S>::Iterador::EliminarSiguiente()
 {
-	// Me aseguro que se cumpla la precondicion
-	#ifdef DEBUG
-	assert(HaySiguiente());
-	#endif
-	
-	itC.EliminarSiguiente();
-	itS.EliminarSiguiente();
+  #ifdef DEBUG
+  assert( HaySiguiente() );
+  #endif
+
+  it_claves_.EliminarSiguiente();
+  it_significados_.EliminarSiguiente();
 }
 
 template<class K, class S>
 void Dicc<K,S>::Iterador::EliminarAnterior()
 {
-	// Me aseguro que se cumpla la precondicion
-	#ifdef DEBUG
-	assert(HayAnterior());
-	#endif
+  #ifdef DEBUG
+  assert( HayAnterior() );
+  #endif
 
-	itC.EliminarAnterior();
-	itS.EliminarAnterior();
+  it_claves_.EliminarAnterior();
+  it_significados_.EliminarAnterior();
 }
 
-	// ---------------------------------------------------------
-	//  class Dicc::const_Iterador
-	// ---------------------------------------------------------
+  // Implementacion const_Iterador
 
 template<class K, class S>
 Dicc<K,S>::const_Iterador::const_Iterador()
@@ -461,201 +420,175 @@ Dicc<K,S>::const_Iterador::const_Iterador()
 
 template<class K, class S>
 Dicc<K,S>::const_Iterador::const_Iterador(const typename Dicc<K,S>::Iterador& otro)
-	: itC( otro.itC ), itS( otro.itS )
+  : it_claves_(otro.it_claves_), it_significados_(otro.it_significados_)
 {}
 
 template<class K, class S>
 Dicc<K,S>::const_Iterador::const_Iterador(const typename Dicc<K, S>::const_Iterador& otro)
-	: itC( otro.itC ), itS( otro.itS )
+  : it_claves_(otro.it_claves_), it_significados_(otro.it_significados_)
 {}
 
 template<class K, class S>
-typename Dicc<K,S>::const_Iterador& Dicc<K,S>::const_Iterador::operator = (const typename Dicc<K, S>::const_Iterador& otro)
+typename Dicc<K,S>::const_Iterador& Dicc<K,S>::const_Iterador::operator=(const typename Dicc<K, S>::const_Iterador& otro)
 {
-	itC = otro.itC;
-	itS = otro.itS;
+  it_claves_ = otro.it_claves_;
+  it_significados_ = otro.it_significados_;
 
-	return *this;
+  return *this;
 }
 
 template<class K, class S>
 bool Dicc<K,S>::const_Iterador::HaySiguiente() const
 {
-	return itC.HaySiguiente();
+  return it_claves_.HaySiguiente();
 }
 
 template<class K, class S>
 bool Dicc<K,S>::const_Iterador::HayAnterior() const
 {
-return itC.HayAnterior();
+  return it_claves_.HayAnterior();
 }
-
 
 template<class K, class S>
 const K& Dicc<K,S>::const_Iterador::SiguienteClave() const
 {
-	// Me aseguro que se cumpla la precondicion
-	#ifdef DEBUG
-	assert(HaySiguiente());
-	#endif
+  #ifdef DEBUG
+  assert(HaySiguiente());
+  #endif
 
-	return itC.Siguiente();
+  return it_claves_.Siguiente();
 }
 
 template<class K, class S>
 const S& Dicc<K,S>::const_Iterador::SiguienteSignificado() const
 {
-	// Me aseguro que se cumpla la precondicion
-	#ifdef DEBUG
-	assert(HaySiguiente());
-	#endif
+  #ifdef DEBUG
+  assert(HaySiguiente());
+  #endif
 
-	return itS.Siguiente();
+  return it_significados_.Siguiente();
 }
-
 
 template<class K, class S>
 typename Dicc<K,S>::const_Elem Dicc<K,S>::const_Iterador::Siguiente() const
 {
-	// Me aseguro que se cumpla la precondicion
-	#ifdef DEBUG
-	assert(HaySiguiente());
-	#endif
+  #ifdef DEBUG
+  assert( HaySiguiente() );
+  #endif
 
-	return const_Elem(itC.Siguiente(), itS.Siguiente());
+  return const_Elem(SiguienteClave(), SiguienteSignificado());
 }
-
 
 template<class K, class S>
 const K& Dicc<K,S>::const_Iterador::AnteriorClave() const
 {
-	// Me aseguro que se cumpla la precondicion
-	#ifdef DEBUG
-	assert(HayAnterior());
-	#endif
+  #ifdef DEBUG
+  assert( HayAnterior() );
+  #endif
 
-	return itC.Anterior();
+  return it_claves_.Anterior();
 }
 
 template<class K, class S>
 const S& Dicc<K,S>::const_Iterador::AnteriorSignificado() const
 {
-	// Me aseguro que se cumpla la precondicion
-	#ifdef DEBUG
-	assert(HayAnterior());
-	#endif
+  #ifdef DEBUG
+  assert(HayAnterior());
+  #endif
 
-	return itS.Anterior();
+  return it_significados_.Anterior();
 }
-
 
 template<class K, class S>
 typename Dicc<K,S>::const_Elem Dicc<K,S>::const_Iterador::Anterior() const
 {
-	// Me aseguro que se cumpla la precondicion
-	#ifdef DEBUG
-	assert(HayAnterior());
-	#endif
+  #ifdef DEBUG
+  assert( HayAnterior() );
+  #endif
 
-	return const_Elem(itC.Anterior(), itS.Anterior());
+  return const_Elem(AnteriorClave(), AnteriorSignificado());
 }
 
 template<class K, class S>
 void Dicc<K,S>::const_Iterador::Avanzar()
 {
-	// Me aseguro que se cumpla la precondicion
-	#ifdef DEBUG
-	assert(HaySiguiente());
-	#endif
+  #ifdef DEBUG
+  assert(HaySiguiente());
+  #endif
 
-	itC.Avanzar();
-	itS.Avanzar();
+  it_claves_.Avanzar();
+  it_significados_.Avanzar();
 }
 
 template<class K, class S>
 void Dicc<K,S>::const_Iterador::Retroceder()
 {
-	// Me aseguro que se cumpla la precondicion
-	#ifdef DEBUG
-	assert(HayAnterior());
-	#endif
+  #ifdef DEBUG
+  assert(HayAnterior());
+  #endif
 
-	itC.Retroceder();
-	itS.Retroceder();
+  it_claves_.Retroceder();
+  it_significados_.Retroceder();
 }
 
 template<class K, class S>
 Dicc<K,S>::const_Iterador::const_Iterador(const Dicc<K,S>* d)
-	: itC(d->claves_.CrearIt()), itS(d->significados_.CrearIt())
+  : it_claves_(d->claves_.CrearIt()), it_significados_(d->significados_.CrearIt())
 {}
 
 template<class K, class S>
 bool Dicc<K,S>::const_Iterador::operator == (const typename Dicc<K,S>::const_Iterador& otro) const
 {
-	return itC == otro.itC && itS == otro.itS;
+  return it_claves_ == otro.it_claves_ && it_significados_ == otro.it_significados_;
 }
 
 template<class K, class S>
-bool Dicc<K,S>::Iterador::operator==(const typename Dicc<K,S>::Iterador& otro) const
+bool Dicc<K,S>::Iterador::operator == (const typename Dicc<K,S>::Iterador& otro) const
 {
-	return itC == otro.itC && itS == otro.itS;
+  return it_claves_ == otro.it_claves_ && it_significados_ == otro.it_significados_;
 }
 
-	// ---------------------------------------------------------
-	//  funciones auxiliares
-	// ---------------------------------------------------------
+  ///Funciones auxiliares
 
 template<class K, class S>
 typename Dicc<K,S>::Iterador Dicc<K,S>::Buscar(const K& clave)
 {
-	typename Dicc<K,S>::Iterador it = CrearIt();
-
-	while(it.HaySiguiente() && it.Siguiente().clave != clave)
-	{
-		it.Avanzar();
-	}
-
-	return it;
+  typename Dicc<K,S>::Iterador it = CrearIt();
+  while(it.HaySiguiente() && it.SiguienteClave() != clave){
+    it.Avanzar();
+  }
+  return it;
 }
 
 template<class K, class S>
 typename Dicc<K,S>::const_Iterador Dicc<K,S>::Buscar(const K& clave) const
 {
-	typename Dicc<K,S>::const_Iterador it = CrearIt();
-
-	while(it.HaySiguiente() && !(it.Siguiente().clave == clave))
-	{
-		it.Avanzar();
-	}
-
-	return it;
+  typename Dicc<K,S>::const_Iterador it = CrearIt();
+  while(it.HaySiguiente() && !(it.SiguienteClave() == clave)){
+      it.Avanzar();
+  }
+  return it;
 }
 
 template<class K, class S>
-std::ostream& operator<<(std::ostream& os, const Dicc<K,S>& d)
+std::ostream& operator << (std::ostream& os, const Dicc<K,S>& d)
 {
-	return Mostrar(os, d, '{', '}');
+  return Mostrar(os, d, '{', '}');
 }
 
 template<class K, class S>
 bool operator == (const Dicc<K,S>& d1, const Dicc<K,S>& d2)
 {
-	bool retval = d1.CantClaves() == d2.CantClaves();
-
-	typename Dicc<K,S>::const_Iterador it1 = d1.CrearIt();
-
-	while(retval and it1.HaySiguiente())
-	{
-		typename Dicc<K,S>::const_Iterador it2 = d2.Buscar(it1.Siguiente().clave);
-
-		retval = it2.HaySiguiente() and it1.Siguiente().significado == it2.Siguiente().significado;
-
-		it1.Avanzar();
-	}
-
-	return retval;
+  bool retval = d1.CantClaves() == d2.CantClaves();
+  typename Dicc<K,S>::const_Iterador it1 = d1.CrearIt();
+  while(retval and it1.HaySiguiente()){
+    typename Dicc<K,S>::const_Iterador it2 = d2.Buscar(it1.SiguienteClave());
+    retval = it2.HaySiguiente() and it1.SiguienteSignificado() == it2.SiguienteSignificado();
+    it1.Avanzar();
+  }
+  return retval;
 }
 
-} // namespace aed2
+}
 
-#endif	//AED2_DICC_H_INCLUDED
+#endif	//AED2_DICC_H_

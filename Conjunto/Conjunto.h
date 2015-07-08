@@ -1,451 +1,447 @@
-/**
- * Modulo Conjunto Lineal
- * Algoritmos y Estructuras de Datos 2
+/*
+ * Author: Fede
+ * Maintainer: tfischer
+ * 
+ * Conjunto (lineal) imlementado sobre Diccionario (Dicc.h),
+ * que está implementado sobre listas enlazadas (Lista.h).
+ * 
+ * Created on 30 de octubre de 2010
  */
 
-#ifndef AED2_CONJUNTO_H_INCLUDED
-#define	AED2_CONJUNTO_H_INCLUDED
+#ifndef AED2_Conjunto_H_INCLUDED
+#define	AED2_Conjunto_H_INCLUDED
 
+#include <iostream>
 #include "../driver-test-cpp/aed2/Dicc.h"
-
-#include <ostream>
-
-/* Descomentar este flag para habilitar los chequeos internos de PRE
- * OJO que invalida las complejidades exportadas de algunas funciones
- */
-#define DEBUG 1
 
 namespace aed2
 {
 
-template <typename T>
+template<class T>
 class Conjunto
 {
-	public:
+  public:
 
-		// Forward declarations. Las definiciones estan mas abajo.
-		class Iterador;
-		class const_Iterador;
+    //forward declarations
+    class Iterador;
+    class const_Iterador;
 
-		Conjunto();
+    // Generadores
 
-		Conjunto(const Conjunto<T>& otro);
+    Conjunto();
+    Conjunto(const Conjunto<T>& otro);
 
-		Conjunto<T>& operator = (const Conjunto<T>& otro);
+    Iterador Agregar(const T& e);
+    Iterador AgregarRapido(const T& e);
 
-		Iterador Agregar(const T& elemento);
-		Iterador AgregarRapido(const T& elemento);
+    void Eliminar(const T& e);
 
-		bool Pertenece(const T& elemento) const;
-		bool EsVacio() const;
+    // Observadores
 
-		void Eliminar(const T& elemento);
+    bool EsVacio() const;
 
-		Nat Cardinal() const;
+    bool Pertenece(const T& e) const;
 
-		const T& DameUno() const;
-		void SinUno();
-		void Unir(const Conjunto<T>& c);
+    Nat Cardinal() const;
 
-		Iterador CrearIt();
-		const_Iterador CrearIt() const;
-		
+    const T& DameUno() const;
+    void SinUno();
+    void Unir(const Conjunto<T>& c);
 
+    Iterador CrearIt();
+    const_Iterador CrearIt() const;
 
-		class Iterador
-		{
-			public:
+    //esta funcion la agregamos aca, porque nos conviene acceder a
+    //la representación.  Sino, no haria falta.
+    bool operator == (const Conjunto<T>& otro) const;
 
-				Iterador();
+    /************************************
+    * Iterador de Conjunto, modificable *
+    ************************************/
+    class Iterador
+    {
+      public:
 
-				Iterador(const typename Conjunto<T>::Iterador& otro);
+        Iterador();
 
-				Iterador& operator=(const typename Conjunto<T>::Iterador& otro);
+        Iterador(const typename Conjunto<T>::Iterador& otra);
 
-				bool operator==(const typename Conjunto<T>::Iterador&) const;
+        Iterador& operator = (const typename Conjunto<T>::Iterador& otra);
 
-				bool HaySiguiente() const;
-				bool HayAnterior() const;
+        bool operator == (const typename Conjunto<T>::Iterador& otro) const;
 
-				T& Siguiente() const;
-				T& Anterior() const;
+        bool HaySiguiente() const;
+        bool HayAnterior() const;
 
-				void Avanzar();
-				void Retroceder();
+        const T& Siguiente() const;
+        const T& Anterior() const;
 
-				void EliminarSiguiente();
-				void EliminarAnterior();
+        void Avanzar();
+        void Retroceder();
 
-			private:
+        void EliminarAnterior();
+        void EliminarSiguiente();
 
-				Iterador(Conjunto<T>* c): itC( c->dic.CrearIt() ){}
+      private:
+      
+        typename Dicc<T,bool>::Iterador it_dicc_;
 
-				friend typename Conjunto<T>::Iterador Conjunto<T>::CrearIt();
+        Iterador(Conjunto<T>& c);
 
-				typename Dicc<T,bool>::Iterador itC;
+        Iterador(const typename Dicc<T,bool>::Iterador& itDict);
 
-				friend class Conjunto<T>::const_Iterador;
-		}; // class Iterador
+        friend class Conjunto<T>::const_Iterador;
 
-	class const_Iterador
-		{
-			public:
+        friend typename Conjunto<T>::Iterador Conjunto<T>::CrearIt();
+        friend typename Conjunto<T>::Iterador Conjunto<T>::Agregar(const T&);
+        friend typename Conjunto<T>::Iterador Conjunto<T>::AgregarRapido(const T&);
+    };
 
-				const_Iterador();
+    /*********************************************
+    * const_Iterador de Conjunto, no modificable *
+    *********************************************/
+    class const_Iterador
+    {
+      public:
 
-				const_Iterador(const typename Conjunto<T>::Iterador& otro);
+        const_Iterador();
 
-				const_Iterador(const typename Conjunto<T>::const_Iterador& otro);
+        const_Iterador(const typename Conjunto<T>::Iterador& otra);
 
-				const_Iterador& operator=(const typename Conjunto<T>::const_Iterador& otro);
+        const_Iterador(const typename Conjunto<T>::const_Iterador& otra);
 
-				bool operator==(const typename Conjunto<T>::const_Iterador&) const;
+        const_Iterador& operator = (const typename Conjunto<T>::const_Iterador& otra);
 
-				bool HaySiguiente() const;
-				bool HayAnterior() const;
-			
-				const T& Siguiente() const;
-				const T& Anterior() const;
-				
-				void Avanzar();
-				void Retroceder();
+        bool operator==(const typename Conjunto<T>::const_Iterador& otro) const;
 
-			private:
+        bool HaySiguiente()const;
+        bool HayAnterior()const;
 
-				const_Iterador(const Conjunto<T>* c): itC( c->dic.CrearIt() ){}
+        const T& Siguiente()const;
+        const T& Anterior()const;
 
-				friend typename Conjunto<T>::const_Iterador Conjunto<T>::CrearIt() const;
+        void Avanzar();
+        void Retroceder();
 
-				typename Dicc<T,bool>::const_Iterador itC;
+      private:
 
-				
-		}; // class const_Iterador
+        typename Dicc<T,bool>::const_Iterador it_dicc_;
 
-	private:
-		
-		Dicc<T,bool> dic;
+        const_Iterador(const Conjunto<T>& c);
 
-}; // class Conjunto
+        friend typename Conjunto<T>::const_Iterador Conjunto<T>::CrearIt() const;
 
-/**
- * Operador ostream de Conjunto
- */
+    };
+
+  private:
+
+    Dicc<T,bool> dicc_;
+};
+
 template<class T>
-std::ostream& operator << (std::ostream& os, const Conjunto<T>& c);
+std::ostream& operator<<(std::ostream&, const Conjunto<T>&);
 
-/**
- * Operador comparacion
- */
 template<class T>
-bool operator == (const Conjunto<T>& d1, const Conjunto<T>& d2);
+bool operator==(const Conjunto<T>&, const Conjunto<T>&);
 
-	// ---------------------------------------------------------
-	//  class Conjunto
-	// ---------------------------------------------------------
+  //  Implementacion de Conjunto
 
-template <typename T>
+template<class T>
 Conjunto<T>::Conjunto()
 {}
 
-template <typename T>
+template<class T>
 Conjunto<T>::Conjunto(const Conjunto<T>& otro)
-	: dic(otro.dic)
+  : dicc_( otro.dicc_ )
 {}
 
-template <typename T>
-Conjunto<T>& Conjunto<T>::operator=(const Conjunto<T>& otro)
-{
-	dic = otro.dic;
-
-	return *this;
+template<class T>
+typename Conjunto<T>::Iterador Conjunto<T>::Agregar(const T& e){
+    return Iterador(dicc_.Definir(e, true));
 }
 
-template <typename T>
-typename Conjunto<T>::Iterador Conjunto<T>::Agregar(const T& elemento)
-{
-	dic.Definir(elemento, true);
-	Iterador it = CrearIt();
-	while (it.Siguiente() != elemento){
-		it.Avanzar();
-	}
-	return it;
+template<class T>
+typename Conjunto<T>::Iterador Conjunto<T>::AgregarRapido(const T& e){
+    return Iterador(dicc_.DefinirRapido(e, true));
 }
 
-template <typename T>
-typename Conjunto<T>::Iterador Conjunto<T>::AgregarRapido(const T& elemento)
-{
-	dic.DefinirRapido(elemento, true);
-	return CrearIt();
+template<class T>
+void Conjunto<T>::Eliminar(const T& e){
+    if(Pertenece(e)) dicc_.Borrar(e);
 }
 
-template <typename T>
-bool Conjunto<T>::Pertenece(const T& elemento) const
-{
-	return dic.Definido(elemento);
+template<class T>
+bool Conjunto<T>::EsVacio() const{
+    return dicc_.CantClaves()==0;
 }
 
-template <typename T>
-bool Conjunto<T>::EsVacio() const
-{
-	return dic.CantClaves() == 0;
+template<class T>
+bool Conjunto<T>::Pertenece(const T& e) const{
+    return dicc_.Definido(e);
 }
 
-template <typename T>
-void Conjunto<T>::Eliminar(const T& elemento)
-{
-	if(dic.Definido(elemento)){
-		dic.Borrar(elemento);
-	}
+template<class T>
+Nat Conjunto<T>::Cardinal() const{
+    return dicc_.CantClaves();
 }
 
-template <typename T>
-Nat Conjunto<T>::Cardinal() const
-{
-	return dic.CantClaves();
-}
-
-template <typename T>
+template<class T>
 const T& Conjunto<T>::DameUno() const
 {
-	// Me aseguro que se cumpla la precondicion
-	#ifdef DEBUG
-	assert(Cardinal() != 0);
-	#endif
-	const_Iterador it = CrearIt();
-	return it.Siguiente();	
+  // Me aseguro que se cumpla la precondicion
+  #ifdef DEBUG
+  assert(Cardinal() != 0);
+  #endif
+  const_Iterador it = CrearIt();
+  return it.Siguiente();  
 }
 
-template <typename T>
+template<class T>
 void Conjunto<T>::SinUno()
 {
-	// Me aseguro que se cumpla la precondicion
-	#ifdef DEBUG
-	assert(Cardinal() != 0);
-	#endif
-	Iterador it = CrearIt();
-	it.EliminarSiguiente();
+  // Me aseguro que se cumpla la precondicion
+  #ifdef DEBUG
+  assert(Cardinal() != 0);
+  #endif
+  Iterador it = CrearIt();
+  it.EliminarSiguiente();
 }
 
-template <typename T>
+template<class T>
 void Conjunto<T>::Unir(const Conjunto<T>& c)
 {
-	const_Iterador it = c.CrearIt();
-	while (it.HaySiguiente()) {
-		if (! Pertenece(it.Siguiente()) ) {
-			AgregarRapido(it.Siguiente());
-		}
-		it.Avanzar();
-	}
+  const_Iterador it = c.CrearIt();
+  while (it.HaySiguiente()) {
+    if (! Pertenece(it.Siguiente()) ) {
+      AgregarRapido(it.Siguiente());
+    }
+    it.Avanzar();
+  }
 }
 
-template <typename T>
-typename Conjunto<T>::Iterador Conjunto<T>::CrearIt()
+
+template<class T>
+bool Conjunto<T>::operator==(const Conjunto<T>& otro) const {
+    return dicc_ == otro.dicc_;
+}
+
+template<class T>
+typename Conjunto<T>::Iterador Conjunto<T>::CrearIt(){
+    return Iterador(*this);
+}
+
+template<class T>
+typename Conjunto<T>::const_Iterador Conjunto<T>::CrearIt() const{
+    return const_Iterador(*this);
+}
+
+  // Implementacion Iterador
+
+template<class T>
+Conjunto<T>::Iterador::Iterador(const typename Conjunto<T>::Iterador& otra)
+  : it_dicc_(otra.it_dicc_)
+{}
+
+template<class T>
+typename Conjunto<T>::Iterador& Conjunto<T>::Iterador::operator = (const typename Conjunto<T>::Iterador& otra)
 {
-	return Iterador(this);
+  it_dicc_ = otra.it_dicc_;
+  return *this;
 }
 
-template <typename T>
-typename Conjunto<T>::const_Iterador Conjunto<T>::CrearIt() const
-{
-	return const_Iterador(this);
-}
-
-	// ---------------------------------------------------------
-	//  class Conjunto::Iterador
-	// ---------------------------------------------------------
-
-template <typename T>
+template<class T>
 Conjunto<T>::Iterador::Iterador()
 {}
 
-template <typename T>
-Conjunto<T>::Iterador::Iterador(const typename Conjunto<T>::Iterador& otro)
-	: itC( otro.itC )
-{}
-
-template <typename T>
-typename Conjunto<T>::Iterador& Conjunto<T>::Iterador::operator = (const typename Conjunto<T>::Iterador& otro)
+template<class T>
+bool Conjunto<T>::Iterador::operator == (const typename Conjunto<T>::Iterador& otro) const
 {
-	itC = otro.itC;
-
-	return *this;
+  return it_dicc_ == otro.it_dicc_;
 }
 
-template <typename T>
+template<class T>
 bool Conjunto<T>::Iterador::HaySiguiente() const
 {
-	return itC.HaySiguiente();
+  return it_dicc_.HaySiguiente();
 }
 
-template <typename T>
+template<class T>
 bool Conjunto<T>::Iterador::HayAnterior() const
 {
-	return itC.HayAnterior();
+  return it_dicc_.HayAnterior();
 }
 
-template <typename T>
-T& Conjunto<T>::Iterador::Siguiente() const
+template<class T>
+const T& Conjunto<T>::Iterador::Siguiente() const
 {
-	// Me aseguro que se cumpla la precondicion
-	#ifdef DEBUG
-	assert(HaySiguiente());
-	#endif
+  #ifdef DEBUG
+  assert( HaySiguiente() );
+  #endif
 
-	return itC.SiguienteClave();
+  return it_dicc_.SiguienteClave();
 }
 
-template <typename T>
-T& Conjunto<T>::Iterador::Anterior() const
+template<class T>
+const T& Conjunto<T>::Iterador::Anterior() const
 {
-	// Me aseguro que se cumpla la precondicion
-	#ifdef DEBUG
-	assert(HayAnterior());
-	#endif
+  #ifdef DEBUG
+  assert( HayAnterior() );
+  #endif
 
-	return itC.AnteriorClave();
+  return it_dicc_.AnteriorClave();
 }
 
-template <typename T>
+template<class T>
 void Conjunto<T>::Iterador::Avanzar()
 {
-	// Me aseguro que se cumpla la precondicion
-	#ifdef DEBUG
-	assert(HaySiguiente());
-	#endif
+  #ifdef DEBUG
+  assert( HaySiguiente() );
+  #endif
 
-	itC.Avanzar();
+  it_dicc_.Avanzar();
 }
 
-template <typename T>
+template<class T>
 void Conjunto<T>::Iterador::Retroceder()
 {
-	// Me aseguro que se cumpla la precondicion
-	#ifdef DEBUG
-	assert(HayAnterior());
-	#endif
+  #ifdef DEBUG
+  assert( HayAnterior() );
+  #endif
 
-	itC.Retroceder();
+  it_dicc_.Retroceder();
 }
 
-template <typename T>
+template<class T>
+void Conjunto<T>::Iterador::EliminarAnterior()
+{
+  #ifdef DEBUG
+  assert( HayAnterior() );
+  #endif
+
+  it_dicc_.EliminarAnterior();
+}
+
+template<class T>
 void Conjunto<T>::Iterador::EliminarSiguiente()
 {
-	// Me aseguro que se cumpla la precondicion
-	#ifdef DEBUG
-	assert(HaySiguiente());
-	#endif
-	itC.EliminarSiguiente();
+  #ifdef DEBUG
+  assert( HaySiguiente() );
+  #endif
+
+  it_dicc_.EliminarSiguiente();
 }
 
+template<class T>
+Conjunto<T>::Iterador::Iterador(Conjunto<T>& c)
+  : it_dicc_( c.dicc_.CrearIt() )
+{}
 
-	// ---------------------------------------------------------
-	//  class Conjunto::const_Iterador
-	// ---------------------------------------------------------
+template<class T>
+Conjunto<T>::Iterador::Iterador(const typename Dicc<T,bool>::Iterador& iter)
+  : it_dicc_(iter)
+{}
 
-template <typename T>
+  // Implementacion const_Iterador
+
+template<class T>
 Conjunto<T>::const_Iterador::const_Iterador()
 {}
 
-template <typename T>
-Conjunto<T>::const_Iterador::const_Iterador(const typename Conjunto<T>::Iterador& otro)
-	: itC( otro.itC )
+template<class T>
+Conjunto<T>::const_Iterador::const_Iterador(const typename Conjunto<T>::Iterador& otra)
+  : it_dicc_( otra.it_dicc_ )
 {}
 
-template <typename T>
-Conjunto<T>::const_Iterador::const_Iterador(const typename Conjunto<T>::const_Iterador& otro)
-	: itC( otro.itC )
+template<class T>
+Conjunto<T>::const_Iterador::const_Iterador(const typename Conjunto<T>::const_Iterador& otra)
+  : it_dicc_( otra.it_dicc_ )
 {}
 
-template <typename T>
-typename Conjunto<T>::const_Iterador& Conjunto<T>::const_Iterador::operator = (const typename Conjunto<T>::const_Iterador& otro)
+template<class T>
+typename Conjunto<T>::const_Iterador& Conjunto<T>::const_Iterador::operator = (const typename Conjunto<T>::const_Iterador& otra)
 {
-	itC = otro.itC;
+  it_dicc_ = otra.it_dicc_;
 
-	return *this;
+  return *this;
 }
 
-template <typename T>
+template<class T>
+bool Conjunto<T>::const_Iterador::operator == (const typename Conjunto<T>::const_Iterador& otro) const
+{
+  return it_dicc_ == otro.it_dicc_;
+}
+
+template<class T>
 bool Conjunto<T>::const_Iterador::HaySiguiente() const
 {
-	return itC.HaySiguiente();
+  return it_dicc_.HaySiguiente();
 }
 
-template <typename T>
+template<class T>
 bool Conjunto<T>::const_Iterador::HayAnterior() const
 {
-return itC.HayAnterior();
+  return it_dicc_.HayAnterior();
 }
 
-template <typename T>
+template<class T>
 const T& Conjunto<T>::const_Iterador::Siguiente() const
 {
-	// Me aseguro que se cumpla la precondicion
-	#ifdef DEBUG
-	assert(HaySiguiente());
-	#endif
+  #ifdef DEBUG
+  assert( HaySiguiente() );
+  #endif
 
-	return itC.SiguienteClave();
+  return it_dicc_.SiguienteClave();
 }
 
-template <typename T>
+template<class T>
 const T& Conjunto<T>::const_Iterador::Anterior() const
 {
-	// Me aseguro que se cumpla la precondicion
-	#ifdef DEBUG
-	assert(HayAnterior());
-	#endif
+  #ifdef DEBUG
+  assert( HayAnterior() );
+  #endif
 
-	return itC.AnteriorClave();
+  return it_dicc_.AnteriorClave();
 }
 
-template <typename T>
+template<class T>
 void Conjunto<T>::const_Iterador::Avanzar()
 {
-	// Me aseguro que se cumpla la precondicion
-	#ifdef DEBUG
-	assert(HaySiguiente());
-	#endif
+  #ifdef DEBUG
+  assert( HaySiguiente() );
+  #endif
 
-	itC.Avanzar();
+  it_dicc_.Avanzar();
 }
 
-template <typename T>
+template<class T>
 void Conjunto<T>::const_Iterador::Retroceder()
 {
-	// Me aseguro que se cumpla la precondicion
-	#ifdef DEBUG
-	assert(HayAnterior());
-	#endif
+  #ifdef DEBUG
+  assert( HayAnterior() );
+  #endif
 
-	itC.Retroceder();
+  it_dicc_.Retroceder();
 }
 
-	// ---------------------------------------------------------
-	//  funciones auxiliares
-	// ---------------------------------------------------------
+template<class T>
+Conjunto<T>::const_Iterador::const_Iterador(const Conjunto<T>& c)
+  : it_dicc_( c.dicc_.CrearIt() )
+{}
 
-template <typename T>
+  // Otras implementaciones
+
+template<class T>
+bool operator==(const Conjunto<T>& c1, const Conjunto<T>& c2)
+{
+  return c1.operator==(c2);
+}
+
+template<class T>
 std::ostream& operator<<(std::ostream& os, const Conjunto<T>& c)
 {
-	return Mostrar(os, c, '[', ']');
+  return Mostrar(os, c, '{', '}');
 }
 
-template <typename T>
-bool operator == (const Conjunto<T>& d1, const Conjunto<T>& d2)
-{
-	bool retval = d1.Cardinal() == d2.Cardinal();
-	typename Conjunto<T>::const_Iterador it = d1.CrearIt();
-	while (retval && it.HaySiguiente()){
-		retval = d2.Pertenece(it.Siguiente());
-		it.Avanzar(); 
-	}
-
-	return retval;
 }
 
-
-
-} // namespace aed2
-
-#endif	//AED2_DICC_H_INCLUDED
-
+#endif	//AED2_Conjunto_H_INCLUDED

@@ -81,6 +81,9 @@ void Avl<T>::rotacionDerecha(Nodo* n){
 		raiz = n->der;
 		n->padre = n->der;
 		n->der = aux;
+		if (aux != NULL){
+			aux->padre = n;	
+		}
 	} else {
 		if (n->padre->izq == n){
 			n->padre->izq = n->der;
@@ -90,7 +93,10 @@ void Avl<T>::rotacionDerecha(Nodo* n){
 		n->der->izq = n;
 		n->der->padre = n->padre;
 		n->padre = n->der;
-		n->der = aux;		
+		n->der = aux;
+		if (aux != NULL){
+			aux->padre = n;	
+		}		
 	}
 	restablecerAlt(n);
 }
@@ -105,6 +111,9 @@ void Avl<T>::rotacionIzquierda(Nodo* n){
 		raiz = n->izq;
 		n->padre = n->izq;
 		n->izq = aux;
+		if (aux != NULL){
+			aux->padre = n;	
+		}
 	} else {
 		if (n->padre->izq == n){
 			n->padre->izq = n->izq;
@@ -115,6 +124,9 @@ void Avl<T>::rotacionIzquierda(Nodo* n){
 		n->izq->padre = n->padre;
 		n->padre = n->izq;
 		n->izq = aux;
+		if (aux != NULL){
+			aux->padre = n;	
+		}
 	}	
 	restablecerAlt(n);
 }
@@ -159,13 +171,13 @@ void Avl<T>::rebalanceo(Nodo* n){
 		altDerIzq = n->der->izq == NULL? 0 : n->der->izq->altura;
 	}
 	if (altDer - altIzq == 2){
-		if (altDerDer > altDerIzq){ //  >= ?
+		if (altDerDer > altDerIzq){ 
 			rotacionDerecha(n);
 		} else {
 			rotacionDerIzq(n);
 		}
 	} else if (altDer - altIzq == -2){
-		if (altIzqIzq > altIzqDer){ //  >= ?
+		if (altIzqIzq > altIzqDer){ 
 			rotacionIzquierda(n);
 		} else{
 			rotacionIzqDer(n);
@@ -251,9 +263,15 @@ void Avl<T>::borrar(const T& clave){
 		}
 		padreAux = aux->padre;
 		if (padreAux->der == aux){
-			padreAux->der = NULL;
+			padreAux->der = aux->izq;
+			if (aux->izq != NULL){
+				aux->izq->padre = padreAux;
+			}
 		} else{
-			padreAux->izq = NULL;		
+			padreAux->izq = aux->izq;
+			if (aux->izq != NULL){
+				aux->izq->padre = padreAux;
+			}
 		}		
 		n->valor = aux->valor;
 		delete aux;	
@@ -262,12 +280,14 @@ void Avl<T>::borrar(const T& clave){
 		if (n == raiz){
 			raiz = n->der;
 			delete n;
+			return;
 		} else {
 			if (n->padre->der == n){
 				n->padre->der = n->der;
 			} else{
 				n->padre->izq = n->der;				
 			}
+			padreAux = n->padre;
 			delete n;
 		}
 	} else {

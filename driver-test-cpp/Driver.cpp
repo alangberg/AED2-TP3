@@ -1,6 +1,4 @@
 #include "Driver.h"
-#include "ArbolSintactico.h"
-
 namespace aed2 {
 
 Driver::Driver(){
@@ -52,8 +50,8 @@ const Interfaz& Driver::IesimaInterfazDe(const Computadora& c, const Nat i) cons
     for (int j = 0; j < i ; j++ ){
         it2.Avanzar();
     }
-    Interfaz inter = it2.Siguiente();
-    return inter;
+    Interfaz *inter = new Interfaz(it2.Siguiente());
+    return *inter;
 } 
 
 const Interfaz& Driver::IntefazUsada(const Computadora& c1, const Computadora& c2) const {
@@ -68,8 +66,8 @@ const Interfaz& Driver::IntefazUsada(const Computadora& c1, const Computadora& c
         it2.Avanzar();
     }
     Pc pc2 = it2.Siguiente();
-    Interfaz res = d.verRed().interfazQueUsan(pc1, pc2);
-    return res;
+    Interfaz* res = new Interfaz(d.verRed().interfazQueUsan(pc1, pc2));
+    return *res;
 }
 
 bool Driver::conectadas(const Computadora& c1, const Computadora& c2) const {
@@ -206,8 +204,8 @@ void Driver::AvanzarSegundo() {
 }
 		
 const Computadora& Driver::laQueMasEnvio() {
-    Computadora res = d.masEnviados().IP();
-    return res;
+    Computadora* res = new Computadora(d.masEnviados().IP());
+    return *res;
 }
 
 const Computadora& Driver::origen(const Paquete& p) const {
